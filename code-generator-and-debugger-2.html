@@ -1,0 +1,1496 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="color-scheme" content="light dark"/>
+<link rel="icon" href="data:,"/>
+<title>Arowotech — Code Generator and Debugger | Python · Ansible · Terraform · PowerShell · CloudFormation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,700;9..144,900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f3ee; --bg2:#eceee7; --surface:#ffffff; --surface2:#eef1ea; --ink:#101613; --ink2:#1a2420; --muted:#5b6962; --line:#dde3db; --line2:#cbd5cc;
+  --accent:#0a6b57; --accent-dark:#074f40; --accent2:#e6f2ed; --accent-glow:rgba(10,107,87,.14);
+  --amber:#b7791f; --amberbg:#fdf3d7; --red:#b42318; --redbg:#fdecea;
+  --green:#067647; --greenbg:#e6f4ea; --codebg:#0c1210; --codeink:#e8f0ea; --chip:#e8ede8;
+  --shadow:0 18px 50px rgba(16,22,19,.10), 0 2px 8px rgba(16,22,19,.06);
+  --shadow-sm:0 4px 16px rgba(16,22,19,.07);
+  --radius:20px;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0b100e; --bg2:#0e1512; --surface:#151d19; --surface2:#1b2521; --ink:#edf2ee; --ink2:#dfe8e1; --muted:#a2b0a6; --line:#2a3530; --line2:#36443d;
+  --accent:#3ec9a7; --accent-dark:#3ec9a7; --accent2:#17332c; --accent-glow:rgba(62,201,167,.12); --amberbg:#332a12; --redbg:#3a1a17; --greenbg:#163324; --codebg:#070a09; --chip:#232d28; --shadow:0 18px 50px rgba(0,0,0,.45), 0 2px 8px rgba(0,0,0,.3); --shadow-sm:0 4px 16px rgba(0,0,0,.3);}
+}
+html[data-theme="dark"]{ --bg:#0b100e; --bg2:#0e1512; --surface:#151d19; --surface2:#1b2521; --ink:#edf2ee; --ink2:#dfe8e1; --muted:#a2b0a6; --line:#2a3530; --line2:#36443d; --accent:#3ec9a7; --accent-dark:#3ec9a7; --accent2:#17332c; --accent-glow:rgba(62,201,167,.12); --amberbg:#332a12; --redbg:#3a1a17; --greenbg:#163324; --codebg:#070a09; --chip:#232d28; --shadow:0 18px 50px rgba(0,0,0,.45); color-scheme:dark; }
+html[data-theme="light"]{ --bg:#f4f3ee; --bg2:#eceee7; --surface:#ffffff; --surface2:#eef1ea; --ink:#101613; --muted:#5b6962; --line:#dde3db; --accent:#0a6b57; --accent2:#e6f2ed; --codebg:#0c1210; --chip:#e8ede8; color-scheme:light; }
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;background-image:radial-gradient(rgba(16,22,19,.055) 1px, transparent 1px);background-size:22px 22px;pointer-events:none;z-index:0}
+@media (prefers-color-scheme: dark){ body::before{background-image:radial-gradient(rgba(255,255,255,.045) 1px, transparent 1px)} }
+a{color:var(--accent)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px 64px;position:relative;z-index:1}
+.topbar{position:sticky;top:12px;z-index:30;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding:10px 12px 10px 10px;margin-top:14px;background:color-mix(in srgb, var(--surface) 88%, transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-sm);transition:box-shadow .25s}
+.topbar.scrolled{box-shadow:0 12px 32px rgba(16,22,19,.14)}
+.brand{display:flex;gap:12px;align-items:center;text-decoration:none;color:var(--ink)}
+.mark{width:46px;height:46px;border-radius:13px;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-family:"Fraunces",serif;font-weight:900;font-size:24px;line-height:1;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);flex-shrink:0}
+.brand b{font-size:18px;letter-spacing:-.02em;line-height:1.1} .brand span{display:block;font-size:12px;color:var(--muted);font-weight:500;line-height:1.3;margin-top:1px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.pill{font-size:12px;font-weight:600;border:1px solid var(--line);background:var(--surface);padding:7px 11px;border-radius:999px;white-space:nowrap}
+.theme-btn{border:1px solid var(--line);background:var(--ink);color:var(--bg);padding:8px 13px;border-radius:999px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}
+.theme-btn:hover{opacity:.88}
+.hero{padding:38px 4px 22px;text-align:left}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);background:var(--accent2);border:1px solid color-mix(in srgb, var(--accent) 22%, transparent);padding:6px 11px;border-radius:999px;margin-bottom:16px}
+.eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--accent);display:inline-block;animation:pulse 2.2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.8)}}
+.hero h1{font-family:"Fraunces",serif;font-size:clamp(42px,6.5vw,72px);line-height:.92;letter-spacing:-.03em;margin:0;max-width:880px;font-weight:900}
+.hero h1 em{font-style:normal;color:var(--accent);position:relative}
+.hero p{color:var(--muted);font-size:17.5px;line-height:1.65;max-width:720px;margin:16px 0 0}
+.hero-ctas{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.btn-hero{padding:13px 20px;border-radius:999px;font-weight:700;font-size:14.5px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:transform .18s, box-shadow .18s}
+.btn-hero.primary{background:var(--ink);color:var(--bg);box-shadow:0 8px 20px rgba(16,22,19,.18)}
+.btn-hero.primary:hover{transform:translateY(-1px)}
+.btn-hero.secondary{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+.btn-hero.secondary:hover{border-color:var(--accent);color:var(--accent)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:26px}
+@media(max-width:700px){.stats{grid-template-columns:1fr 1fr}}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 16px 13px;box-shadow:var(--shadow-sm)}
+.stat b{font-size:28px;display:block;line-height:1;font-family:"Fraunces",serif;letter-spacing:-.02em} .stat span{font-size:12.5px;color:var(--muted);font-weight:500;display:block;margin-top:5px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.card-head{padding:22px 22px 0;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-start} .card-head h2{margin:0;font-size:22px;letter-spacing:-.02em} .card-head p{margin:5px 0 0;color:var(--muted);font-size:14px;max-width:640px}
+.steps-mini{display:flex;gap:6px;flex-wrap:wrap}
+.steps-mini span{font-size:11.5px;font-weight:700;background:var(--surface2);border:1px solid var(--line);padding:6px 9px;border-radius:999px;color:var(--muted)}
+.steps-mini span b{color:var(--accent)}
+.langs{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;padding:18px 22px 0}
+.lang{border:1.5px solid var(--line);background:var(--surface);border-radius:14px;padding:13px 13px;text-align:left;cursor:pointer;color:var(--ink);font:inherit;transition:border-color .18s, background .18s, transform .18s}
+.lang:hover{border-color:var(--accent);transform:translateY(-1px)}
+.lang b{display:block;font-size:15px} .lang span{font-size:12px;color:var(--muted);line-height:1.35;display:block;margin-top:2px}
+.lang.active{border-color:var(--accent);background:var(--accent2);box-shadow:0 0 0 3px var(--accent-glow)}
+.lang .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block;margin-right:6px;vertical-align:1px}
+.grid{display:grid;grid-template-columns:1fr 1.38fr;gap:0}
+@media(max-width:900px){.grid{grid-template-columns:1fr}.langs{grid-template-columns:1fr 1fr}}
+.left{padding:20px 22px 22px;border-right:1px solid var(--line)}
+@media(max-width:900px){.left{border-right:none;border-bottom:1px solid var(--line)}}
+label{font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);display:block;margin:16px 0 7px}
+label:first-child{margin-top:0}
+textarea,input,select{width:100%;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);padding:12px;font:inherit;transition:border-color .15s, box-shadow .15s}
+textarea{resize:vertical} textarea:focus,input:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+#prompt{min-height:108px}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+.chipbtn{border:1px solid var(--line);background:var(--chip);color:var(--ink);padding:7px 11px;border-radius:999px;font-size:12.5px;cursor:pointer;font-weight:500;font:inherit;transition:all .15s}
+.chipbtn:hover{border-color:var(--accent);background:var(--accent2);color:var(--accent-dark)}
+.principles{display:flex;gap:8px;flex-wrap:wrap}
+.prin{flex:1;min-width:100px;border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:11px;cursor:pointer;text-align:left;color:var(--ink);font:inherit;transition:all .15s}
+.prin b{font-size:13px;display:block} .prin span{font-size:11.5px;color:var(--muted);line-height:1.4;display:block;margin-top:2px}
+.prin.on{border-color:var(--accent);background:var(--accent2)}
+.prin:not(.on){opacity:.62}
+.btn{border:none;cursor:pointer;border-radius:12px;padding:13px 18px;font-weight:700;font:inherit;font-size:15px;transition:transform .15s, opacity .15s, background .15s, border-color .15s}
+.btn:active{transform:scale(.985)}
+.btn-primary{background:var(--ink);color:var(--bg);width:100%;margin-top:16px;box-shadow:0 8px 18px rgba(16,22,19,.16)}
+.btn-primary:hover{opacity:.93}
+.btn-accent{background:var(--accent);color:#fff}
+.btn-accent:hover{background:var(--accent-dark)}
+.btn-ghost{background:var(--surface);border:1px solid var(--line);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn-sm{padding:9px 12px;font-size:13px;border-radius:10px}
+.btn.loading{opacity:.65;pointer-events:none}
+.right{display:flex;flex-direction:column;min-width:0;background:var(--surface)}
+.codehead{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap;background:var(--surface2)}
+.codehead-left{display:flex;align-items:center;gap:10px;min-width:0}
+.traffic{display:flex;gap:6px} .traffic i{width:11px;height:11px;border-radius:50%;display:block} .traffic i:nth-child(1){background:#e0655a} .traffic i:nth-child(2){background:#e3b341} .traffic i:nth-child(3){background:#3fb27f}
+.codehead b{font-family:"IBM Plex Mono",monospace;font-size:13px;letter-spacing:-.01em}
+.lang-badge{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--ink);color:var(--bg);padding:4px 8px;border-radius:999px}
+.code-actions{display:flex;gap:7px;flex-wrap:wrap}
+.editor-wrap{position:relative;background:var(--codebg)}
+#codeEditor{border:none;border-radius:0;background:var(--codebg);color:var(--codeink);font-family:"IBM Plex Mono",monospace;font-size:13.5px;line-height:1.7;min-height:430px;padding:18px;white-space:pre;overflow:auto;tab-size:2}
+#codeEditor:focus{outline:none;box-shadow:inset 0 0 0 2px rgba(62,201,167,.25)}
+.editor-meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:9px 14px;background:#0a0f0d;color:#8aa396;font-family:"IBM Plex Mono",monospace;font-size:11.5px;border-top:1px solid rgba(255,255,255,.07)}
+.editor-meta kbd{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);border-bottom-width:2px;padding:1px 5px;border-radius:5px;font-family:inherit;font-size:11px;color:#cfe0d4}
+.actionbar{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:12px 14px;border-top:1px solid var(--line);background:var(--surface2)}
+@media(max-width:560px){.actionbar{grid-template-columns:1fr}}
+.actionbar button{padding:13px 10px}
+.results{padding:4px 22px 22px;display:grid;gap:14px}
+.panel{border:1px solid var(--line);border-radius:16px;overflow:hidden;animation:panelIn .35s ease both}
+@keyframes panelIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.panel-head{padding:13px 15px;background:var(--surface2);display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.panel-head b{font-size:14px} .panel-body{padding:15px;font-size:14px}
+.panel-body ul{margin:6px 0;padding-left:18px} .panel-body li{margin:5px 0}
+.scoregrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:640px){.scoregrid{grid-template-columns:1fr}}
+.scorebox{border:1px solid var(--line);border-radius:12px;padding:13px}
+.scorebox b{font-size:30px;font-family:"Fraunces",serif} .bar{height:8px;background:var(--chip);border-radius:999px;overflow:hidden;margin-top:9px}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:999px;transition:width .7s cubic-bezier(.2,.8,.2,1)}
+.tag{font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;white-space:nowrap}
+.tag-high{background:var(--redbg);color:var(--red)} .tag-med{background:var(--amberbg);color:var(--amber)} .tag-low{background:var(--greenbg);color:var(--green)}
+.muted{color:var(--muted)} .small{font-size:13px}
+.section{margin-top:36px} .section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:14px} .section h2{font-family:"Fraunces",serif;font-size:32px;letter-spacing:-.02em;margin:0 0 6px;line-height:1.05} .section>p, .section-head p{color:var(--muted);margin:0;max-width:760px}
+.filterbar{display:flex;gap:7px;flex-wrap:wrap}
+.filterbtn{border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:8px 13px;border-radius:999px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.filterbtn.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.templates{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:900px){.templates{grid-template-columns:1fr 1fr}} @media(max-width:560px){.templates{grid-template-columns:1fr}}
+.tcard{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:17px;cursor:pointer;text-align:left;color:var(--ink);font:inherit;transition:border-color .18s, transform .18s, box-shadow .18s;box-shadow:var(--shadow-sm)}
+.tcard:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 12px 28px rgba(16,22,19,.10)} .tcard b{display:block;font-size:15px;margin:4px 0 3px} .tcard span{font-size:13px;color:var(--muted);line-height:1.5;display:block} .tcard .langtag{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.07em}
+.tcard.hidden-card{display:none}
+.checks{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:900px){.checks{grid-template-columns:1fr}}
+.check{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow-sm)}
+.check h3{margin:0 0 9px;font-size:16px} .check ul{margin:0;padding-left:18px;color:var(--muted);font-size:14px;line-height:1.6}
+.how{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:900px){.how{grid-template-columns:1fr 1fr}} @media(max-width:520px){.how{grid-template-columns:1fr}}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow-sm);transition:transform .18s, border-color .18s}
+.step:hover{transform:translateY(-2px);border-color:var(--accent)} .step n{font-family:"IBM Plex Mono",monospace;font-weight:700;color:var(--accent);font-size:13px} .step b{display:block;margin:7px 0 4px;font-size:15px} .step p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.6}
+footer{margin-top:38px;padding:20px 2px 0;border-top:1px solid var(--line);color:var(--muted);font-size:13px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;line-height:1.6}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:999px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:50;box-shadow:0 14px 34px rgba(0,0,0,.22);max-width:calc(100vw - 32px);text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.empty{color:var(--muted);font-size:14px;padding:6px 0}
+code.inline{font-family:"IBM Plex Mono",monospace;background:var(--chip);padding:1px 5px;border-radius:5px;font-size:12.5px}
+.errorbox{padding:15px 16px;border-top:1px solid var(--line);background:var(--surface)}
+.errorbox label{margin-top:0}
+.errorbox textarea{font-family:"IBM Plex Mono",monospace;font-size:12.5px;line-height:1.55;background:var(--surface2);min-height:78px}
+.errorbox .hint{margin:7px 0 0}
+.error-snippet{background:var(--codebg);color:var(--codeink);padding:12px 13px;border-radius:10px;font-family:"IBM Plex Mono",monospace;font-size:12.5px;line-height:1.55;white-space:pre-wrap;word-break:break-word;margin:10px 0;max-height:180px;overflow:auto}
+.matched{border:1px solid var(--line);border-radius:10px;padding:11px 12px;background:var(--accent2);margin:10px 0;font-size:13.5px}
+.reveal{opacity:1;transform:none}
+.reveal.in{animation:revealIn .55s ease both}
+@keyframes revealIn{from{opacity:.35;transform:translateY(10px)}to{opacity:1;transform:none}}
+.backtop{position:fixed;right:18px;bottom:18px;z-index:40;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--ink);color:var(--bg);font-size:18px;cursor:pointer;opacity:.92;pointer-events:auto;transition:.25s;box-shadow:0 10px 24px rgba(0,0,0,.18)}
+.backtop.show{opacity:1}
+@media (prefers-reduced-motion: reduce){ *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important;scroll-behavior:auto !important} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand"><div class="mark" aria-hidden="true">A</div><div><b style="font-size:17px;letter-spacing:-.01em">Arowotech</b><span>Code Generator &amp; Debugger — Secure · Reliable · Cost-optimised</span></div></div>
+    <div class="pills"><span class="pill">🌍 Works worldwide — no sign-up</span><span class="pill">5 languages</span><span class="pill">Runs in your browser</span><button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle dark mode">◐ Theme</button></div>
+  </div>
+
+  <section class="hero reveal">
+    <div class="eyebrow"><i></i> Arowotech &middot; Code Studio</div>
+    <h1>Write it. <em>Fix it.</em><br>Understand it. Trust it.</h1>
+    <p>Describe what you need and get production-minded code in Python, Ansible, Terraform, PowerShell, or CloudFormation — then debug it, get a plain-English explanation, and score it for security, reliability, and cost before you ship it.</p>
+    <div class="hero-ctas"><a class="btn-hero primary" href="#studio">Open the Studio &darr;</a><a class="btn-hero secondary" href="#templates">Browse 15 templates</a></div>
+    <div class="stats">
+      <div class="stat"><b data-count="5">5</b><span>Languages supported</span></div>
+      <div class="stat"><b data-count="30" data-suffix="+">30+</b><span>Debug &amp; security checks</span></div>
+      <div class="stat"><b data-count="15">15</b><span>Ready-made templates</span></div>
+      <div class="stat"><b data-count="3">3</b><span>Scores on every review</span></div>
+    </div>
+  </section>
+
+  <!-- WORKBENCH -->
+  <section class="card" id="studio">
+    <div class="card-head"><div><h2>The Studio</h2><p>Describe it or paste your own code, pair it with the error you hit, then generate, debug, explain and assess — all in one place.</p></div><div class="steps-mini" aria-hidden="true"><span><b>1</b> Language</span><span><b>2</b> Describe</span><span><b>3</b> Error</span><span><b>4</b> Review</span></div></div>
+    <div class="langs" role="tablist" aria-label="Language">
+      <button class="lang active" data-lang="python"><b><span class="dot"></span>Python</b><span>Automation, AWS, data &amp; APIs</span></button>
+      <button class="lang" data-lang="ansible"><b>Ansible</b><span>Playbooks &amp; configuration</span></button>
+      <button class="lang" data-lang="terraform"><b>Terraform</b><span>Infrastructure as Code</span></button>
+      <button class="lang" data-lang="powershell"><b>PowerShell</b><span>Windows &amp; Azure admin</span></button>
+      <button class="lang" data-lang="cloudformation"><b>CloudFormation</b><span>AWS stacks in YAML</span></button>
+    </div>
+
+    <div class="grid">
+      <div class="left">
+        <label for="prompt">What should the code do?</label>
+        <textarea id="prompt" rows="4" placeholder="e.g. Create a secure S3 bucket with versioning, encryption and a lifecycle rule to cut storage costs">Create a secure S3 bucket with versioning, encryption, blocked public access, and a lifecycle rule that moves old objects to cheaper storage</textarea>
+        <div class="chips" id="exampleChips"></div>
+
+        <label>Generation principles — always applied</label>
+        <div class="principles">
+          <button class="prin on" data-prin="security" aria-pressed="true"><b>🔒 Security</b><span>Least privilege, encryption, no hard-coded secrets</span></button>
+          <button class="prin on" data-prin="reliability" aria-pressed="true"><b>🛡 Reliability</b><span>Error handling, retries, idempotency, logging</span></button>
+          <button class="prin on" data-prin="cost" aria-pressed="true"><b>◈ Cost</b><span>Right-sizing, lifecycle rules, no waste</span></button>
+        </div>
+
+        <label for="envSel">Target environment</label>
+        <select id="envSel"><option>AWS</option><option>Azure</option><option>On-premises / generic</option><option>Multi-cloud</option></select>
+
+        <button class="btn btn-primary" id="generateBtn">✦ &nbsp;Generate code</button>
+        <div style="display:flex;gap:8px;margin-top:9px">
+          <button class="btn btn-ghost btn-sm" id="buggyBtn" style="flex:1">Load a buggy sample to debug →</button>
+          <button class="btn btn-ghost btn-sm" id="clearBtn">Clear</button>
+        </div>
+        <p class="small muted" style="margin:12px 0 0">Tip: you can also paste <em>any</em> existing code into the editor on the right — Debug, Explain and Assess work on code you wrote, not just code generated here. If it failed, paste the exact error message under the editor too, so Debug can pair the two together.</p>
+      </div>
+
+      <div class="right">
+        <div class="codehead"><div class="codehead-left"><span class="traffic" aria-hidden="true"><i></i><i></i><i></i></span><b id="fileName">main.py</b><span class="lang-badge" id="langBadge">Python</span></div><div class="code-actions">
+          <button class="btn btn-ghost btn-sm" id="copyBtn">Copy code</button>
+          <button class="btn btn-ghost btn-sm" id="downloadBtn">Download</button>
+        </div></div>
+        <div class="editor-wrap"><textarea id="codeEditor" spellcheck="false" aria-label="Code editor"></textarea><div class="editor-meta"><span id="editorStats">0 lines &middot; 0 chars</span><span><kbd>Tab</kbd> indent &middot; <kbd>Ctrl</kbd>+<kbd>Enter</kbd> generate</span></div></div>
+        <div class="errorbox">
+          <label for="errorInput">Error message <span style="text-transform:none;letter-spacing:0;font-weight:500">(optional — recommended for Debug)</span></label>
+          <textarea id="errorInput" rows="3" spellcheck="false" placeholder="Paste the error you hit — e.g. Traceback, exception name, Terraform Error: …, Ansible FAILED! output, or a PowerShell error. Debug pairs it with the code above."></textarea>
+          <p class="small muted hint">Pair your code with its error and Debug &amp; Fix works against what actually failed — the error type, the line it points to, and the likely cause — not just generic patterns in the code.</p>
+          <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+            <button class="btn btn-ghost btn-sm" id="sampleErrorBtn" type="button">Load a sample error</button>
+            <button class="btn btn-ghost btn-sm" id="clearErrorBtn" type="button">Clear error</button>
+          </div>
+        </div>
+        <div class="actionbar">
+          <button class="btn btn-accent" id="debugBtn">🐛 &nbsp;Debug &amp; Fix</button>
+          <button class="btn btn-primary" id="explainBtn" style="margin:0">💬 &nbsp;Explain this code</button>
+          <button class="btn btn-ghost" id="assessBtn">📊 &nbsp;Assess security &amp; reliability</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="results" id="results">
+      <div class="panel" id="debugPanel" style="display:none"><div class="panel-head"><b>🐛 Debug report</b><span id="debugMeta" class="small muted"></span></div><div class="panel-body" id="debugBody"></div></div>
+      <div class="panel" id="explainPanel" style="display:none"><div class="panel-head"><b>💬 What this code does</b><span class="small muted">Plain English</span></div><div class="panel-body" id="explainBody"></div></div>
+      <div class="panel" id="assessPanel" style="display:none"><div class="panel-head"><b>📊 Assessment — security · reliability · cost</b><span id="assessVerdict"></span></div><div class="panel-body" id="assessBody"></div></div>
+      <div id="noResults" class="empty" style="padding-bottom:6px">No analysis yet — generate or paste code, then run <b>Debug &amp; Fix</b>, <b>Explain</b>, or <b>Assess</b>.</div>
+    </div>
+  </section>
+
+  <!-- TEMPLATES -->
+  <section class="section reveal" id="templates"><div class="section-head"><div><h2>Start from a proven template</h2><p>Every template already bakes in encryption, least privilege, error handling, and cost controls. Click one to load it into the Studio.</p></div><div class="filterbar" id="templateFilters" role="group" aria-label="Filter templates"><button class="filterbtn active" data-filter="all" type="button">All</button><button class="filterbtn" data-filter="python" type="button">Python</button><button class="filterbtn" data-filter="ansible" type="button">Ansible</button><button class="filterbtn" data-filter="terraform" type="button">Terraform</button><button class="filterbtn" data-filter="powershell" type="button">PowerShell</button><button class="filterbtn" data-filter="cloudformation" type="button">CloudFormation</button></div></div>
+    <div class="templates" id="templateGrid"></div>
+    <p class="small muted" id="filterEmpty" style="display:none;margin-top:12px">No templates match this filter.</p>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section reveal"><h2>How it works</h2><p>Four steps, one page — nothing you paste ever leaves your browser.</p>
+    <div class="how">
+      <div class="step"><n>01</n><b>Generate</b><p>Describe the task in plain words. The generator picks the right pattern for the language and applies your security, reliability, and cost principles.</p></div>
+      <div class="step"><n>02</n><b>Debug &amp; Fix</b><p>Paste your code <em>and</em> the error message you hit. It pairs the two — matching the error type and line to the code — scans for 30+ real problems, and rewrites the code with the fixes applied.</p></div>
+      <div class="step"><n>03</n><b>Explain</b><p>A line-by-line plain-English walkthrough: what each block does, what runs first, and what could go wrong in production.</p></div>
+      <div class="step"><n>04</n><b>Assess</b><p>Scores out of 100 for Security, Reliability, and Cost Efficiency, with every deduction explained and a fix suggested.</p></div>
+    </div>
+  </section>
+
+  <!-- CHECKS -->
+  <section class="section reveal"><h2>What gets checked</h2><p>These are the failure modes that cause real incidents — leaked credentials, runaway bills, and scripts that work once and break on the second run.</p>
+    <div class="checks">
+      <div class="check"><h3>🔒 Security</h3><ul><li>Hard-coded passwords, keys &amp; tokens</li><li>Public / <code class="inline">0.0.0.0/0</code> access rules</li><li>Missing encryption at rest</li><li><code class="inline">eval</code>, <code class="inline">Invoke-Expression</code> &amp; unsafe execution</li><li>Over-privileged policies &amp; plain-text secrets</li></ul></div>
+      <div class="check"><h3>🛡 Reliability</h3><ul><li>Missing error handling &amp; retries</li><li>Network calls with no timeout</li><li>Non-idempotent tasks that break on re-run</li><li>Bare <code class="inline">except:</code> that hides failures</li><li>No logging — invisible when it fails at 3am</li></ul></div>
+      <div class="check"><h3>◈ Cost optimisation</h3><ul><li>Oversized instances with no justification</li><li>No lifecycle / retention rules on storage</li><li>Resources with no tags for cost tracking</li><li>Always-on resources that could be scheduled</li><li>Expensive storage tiers for cold data</li></ul></div>
+    </div>
+  </section>
+
+  <footer><span><strong style="color:var(--ink)">Arowotech</strong> — Code Generator &amp; Debugger — generated code is a starting point: review it, test it in a non-production environment, and check current provider docs before deploying.</span><span>Python · Ansible · Terraform · PowerShell · CloudFormation</span></footer>
+</div>
+<button class="backtop" id="backTop" type="button" aria-label="Back to top">↑</button>
+<div class="toast" id="toast">Copied</div>
+
+<script>
+var LANG = 'python';
+var FILENAMES = { python:'main.py', ansible:'playbook.yml', terraform:'main.tf', powershell:'script.ps1', cloudformation:'template.yaml' };
+
+var EXAMPLES = {
+  python: ['Secure S3 bucket with lifecycle cost rules','List EC2 instances and stop idle ones to save cost','Read a CSV, validate rows, and load to a database safely','Call a REST API with retries, timeout and logging'],
+  ansible: ['Harden a Linux server and create a sudo user','Install and configure Nginx with HTTPS','Patch all servers and reboot only if required','Deploy an app with rollback on failure'],
+  terraform: ['Secure S3 bucket with versioning and encryption','Cost-optimised EC2 instance with tags and monitoring','Private VPC with public and private subnets','RDS database with backups and encryption'],
+  powershell: ['Create Active Directory users from a CSV safely','Clean up old files and report disk space saved','Check and restart a Windows service with logging','Audit local admin group members and export a report'],
+  cloudformation: ['Secure S3 bucket with lifecycle cost rules','Cost-optimised EC2 instance with restricted SSH','Private RDS database with backups and encryption','Secure-by-default starter stack with capped log retention']
+};
+
+/* ---------------- GENERATORS ---------------- */
+function header(lang, title){
+  if(lang==='python') return '# ' + title + '\n# Secure by default: secrets from environment, timeouts + retries, structured logging.\n# Cost-aware: paginated calls, no unbounded scans.\n';
+  if(lang==='ansible') return '---\n# ' + title + '\n# Secure by default: secrets via Ansible Vault vars, idempotent tasks, handlers for restarts.\n';
+  if(lang==='terraform') return '# ' + title + '\n# Secure by default: encryption, least privilege, public access blocked.\n# Cost-aware: right-sized, tagged for cost allocation, lifecycle rules where relevant.\n';
+  if(lang==='cloudformation') return '# ' + title + '\n# Secure by default: encryption on, public access blocked, secrets as NoEcho parameters — never defaults in the template.\n# Cost-aware: right-sized resources, lifecycle rules, tags on everything for cost allocation.\n';
+  return '# ' + title + '\n# Secure by default: no plain-text passwords, -WhatIf support, full logging.\n#Requires -Version 5.1\n';
+}
+var GEN = {
+python: function(p){
+  var t = p.toLowerCase();
+  if(t.indexOf('s3')>-1 || t.indexOf('bucket')>-1) return header('python','Create a secure, cost-optimised S3 bucket (boto3)') + `
+import os, sys, json, logging
+import boto3
+from botocore.exceptions import ClientError
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+log = logging.getLogger("s3-provision")
+
+BUCKET = os.environ["BUCKET_NAME"]            # never hard-code names/secrets in code
+REGION = os.environ.get("AWS_REGION", "us-east-1")
+
+def create_bucket(s3):
+    try:
+        if REGION == "us-east-1":
+            s3.create_bucket(Bucket=BUCKET)
+        else:
+            s3.create_bucket(Bucket=BUCKET,
+                CreateBucketConfiguration={"LocationConstraint": REGION})
+    except ClientError as e:
+        if e.response["Error"]["Code"] != "BucketAlreadyOwnedByYou":
+            raise
+
+def harden_bucket(s3):
+    # Encryption at rest (SSE-S3) — no extra cost, on by default
+    s3.put_bucket_encryption(Bucket=BUCKET, ServerSideEncryptionConfiguration={
+        "Rules": [{"ApplyServerSideEncryptionByDefault": {"SSEAlgorithm": "AES256"},
+                   "BucketKeyEnabled": True}]})
+    # Block ALL public access
+    s3.put_public_access_block(Bucket=BUCKET, PublicAccessBlockConfiguration={
+        "BlockPublicAcls": True, "IgnorePublicAcls": True,
+        "BlockPublicPolicy": True, "RestrictPublicBuckets": True})
+    s3.put_bucket_versioning(Bucket=BUCKET,
+        VersioningConfiguration={"Status": "Enabled"})
+
+def apply_lifecycle(s3):
+    # COST: infrequent data -> STANDARD_IA at 30d, Glacier at 90d, expire old versions
+    s3.put_bucket_lifecycle_configuration(Bucket=BUCKET, LifecycleConfiguration={"Rules": [{
+        "ID": "cost-optimise", "Status": "Enabled", "Filter": {},
+        "Transitions": [
+            {"Days": 30, "StorageClass": "STANDARD_IA"},
+            {"Days": 90, "StorageClass": "GLACIER_IR"}],
+        "NoncurrentVersionExpiration": {"NoncurrentDays": 90},
+        "AbortIncompleteMultipartUpload": {"DaysAfterInitiation": 7}}]})
+
+def main():
+    s3 = boto3.client("s3", region_name=REGION,
+                      config=boto3.session.Config(connect_timeout=5, read_timeout=30,
+                                                  retries={"max_attempts": 4, "mode": "standard"}))
+    create_bucket(s3); harden_bucket(s3); apply_lifecycle(s3)
+    s3.put_bucket_tagging(Bucket=BUCKET, Tagging={"TagSet": [
+        {"Key": "cost-centre", "Value": os.environ.get("COST_CENTRE", "platform")},
+        {"Key": "managed-by", "Value": "automation"}]})
+    log.info("Bucket %s ready: encrypted, private, versioned, lifecycle applied.", BUCKET)
+
+if __name__ == "__main__":
+    try: main()
+    except Exception: log.exception("Provisioning failed"); sys.exit(1)
+`;
+  if(t.indexOf('ec2')>-1 || t.indexOf('instance')>-1 || t.indexOf('idle')>-1) return header('python','Find and stop idle EC2 instances to cut cost (boto3)') + `
+import os, sys, logging
+from datetime import datetime, timedelta, timezone
+import boto3
+from botocore.exceptions import ClientError
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+log = logging.getLogger("ec2-cost")
+DRY_RUN = os.environ.get("DRY_RUN", "true").lower() == "true"  # safe default
+IDLE_CPU, IDLE_DAYS = 5.0, 7
+
+def is_idle(cw, instance_id):
+    end = datetime.now(timezone.utc); start = end - timedelta(days=IDLE_DAYS)
+    stats = cw.get_metric_statistics(Namespace="AWS/EC2", MetricName="CPUUtilization",
+        Dimensions=[{"Name": "InstanceId", "Value": instance_id}],
+        StartTime=start, EndTime=end, Period=86400, Statistics=["Average"])
+    pts = stats.get("Datapoints", [])
+    return bool(pts) and max(p["Average"] for p in pts) < IDLE_CPU
+
+def main():
+    ec2 = boto3.client("ec2"); cw = boto3.client("cloudwatch")
+    paginator = ec2.get_paginator("describe_instances")  # paginate: no missed/oversized calls
+    stopped = 0
+    for page in paginator.paginate(Filters=[{"Name": "instance-state-name", "Values": ["running"]}]):
+        for res in page["Reservations"]:
+            for inst in res["Instances"]:
+                tags = {x["Key"]: x["Value"] for x in inst.get("Tags", [])}
+                if tags.get("do-not-stop") == "true": continue
+                iid = inst["InstanceId"]
+                try:
+                    if is_idle(cw, iid):
+                        log.info("%s idle <%s%% CPU for %sd — %s", iid, IDLE_CPU, IDLE_DAYS,
+                                 "would stop (dry-run)" if DRY_RUN else "stopping")
+                        if not DRY_RUN:
+                            ec2.stop_instances(InstanceIds=[iid]); stopped += 1
+                except ClientError: log.exception("Failed on %s", iid)
+    log.info("Done. Stopped: %d (dry-run=%s). Est. saving: ~720 hrs/month per stopped instance.", stopped, DRY_RUN)
+
+if __name__ == "__main__":
+    try: main()
+    except Exception: log.exception("Run failed"); sys.exit(1)
+`;
+  if(t.indexOf('api')>-1 || t.indexOf('rest')>-1 || t.indexOf('http')>-1) return header('python','Call a REST API safely — timeout, retries, auth from environment') + `
+import os, sys, logging
+import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+log = logging.getLogger("api-client")
+
+BASE_URL = os.environ["API_BASE_URL"]
+API_KEY = os.environ["API_KEY"]  # secret from environment / secrets manager — never in code
+
+def build_session():
+    retry = Retry(total=4, backoff_factor=1, status_forcelist=[429, 500, 502, 503, 504],
+                  allowed_methods=["GET", "HEAD"])  # only retry safe methods automatically
+    s = requests.Session()
+    s.mount("https://", HTTPAdapter(max_retries=retry))
+    s.headers.update({"Authorization": f"Bearer {API_KEY}", "Accept": "application/json"})
+    return s
+
+def get_json(session, path, params=None):
+    r = session.get(f"{BASE_URL}{path}", params=params, timeout=(5, 30))  # always set a timeout
+    r.raise_for_status()
+    return r.json()
+
+def main():
+    with build_session() as s:  # context manager: connections are always closed
+        data = get_json(s, "/v1/items", params={"page": 1, "page_size": 100})
+        log.info("Fetched %d items", len(data.get("items", [])))
+
+if __name__ == "__main__":
+    try: main()
+    except requests.RequestException: log.exception("API call failed"); sys.exit(1)
+`;
+  return header('python','Robust automation script') + `
+"""${'${title}'} — generated with secure, reliable, cost-aware defaults."""
+import os, sys, logging
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+log = logging.getLogger("automation")
+
+# Config from environment — no secrets or environment names hard-coded
+CONFIG = {
+    "region": os.environ.get("AWS_REGION", "us-east-1"),
+    "dry_run": os.environ.get("DRY_RUN", "true").lower() == "true",
+}
+
+def run_task():
+    """Idempotent: safe to run twice — second run changes nothing."""
+    log.info("Starting (dry_run=%s, region=%s)", CONFIG["dry_run"], CONFIG["region"])
+    # TODO: implement the task steps here, one small function per step,
+    # each wrapped so a single failure is logged and does not abort the rest.
+    log.info("Task complete")
+
+def main():
+    try:
+        run_task()
+    except Exception:
+        log.exception("Run failed")
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()
+`.replace('${title}', p.slice(0,80) || 'Automation task');
+},
+ansible: function(p){
+  var t=p.toLowerCase();
+  if(t.indexOf('nginx')>-1 || t.indexOf('web')>-1) return header('ansible','Install & configure Nginx with HTTPS — idempotent, handler-driven') + `
+- name: Web server with Nginx + TLS
+  hosts: webservers
+  become: true
+  vars:
+    server_name: "{{ vault_server_name }}"        # secrets/names via Vault, never plain text
+    tls_cert: /etc/letsencrypt/live/{{ server_name }}/fullchain.pem
+    tls_key: /etc/letsencrypt/live/{{ server_name }}/privkey.pem
+  tasks:
+    - name: Install Nginx (pinned major version)
+      ansible.builtin.package:
+        name: nginx
+        state: present
+
+    - name: Deploy hardened Nginx config
+      ansible.builtin.template:
+        src: nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        mode: "0644"
+        validate: "nginx -t -c %s"
+      notify: Reload Nginx
+
+    - name: Enforce secure TLS settings
+      ansible.builtin.lineinfile:
+        path: /etc/nginx/nginx.conf
+        regexp: "^\\s*ssl_protocols"
+        line: "    ssl_protocols TLSv1.2 TLSv1.3;"
+      notify: Reload Nginx
+
+    - name: Remove default site (reduces attack surface)
+      ansible.builtin.file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      notify: Reload Nginx
+
+    - name: Ensure Nginx is running and enabled
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
+
+    - name: Allow only HTTP/HTTPS through the firewall
+      community.general.ufw:
+        rule: allow
+        port: "{{ item }}"
+        proto: tcp
+      loop: ["80", "443"]
+  handlers:
+    - name: Reload Nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded
+`;
+  if(t.indexOf('patch')>-1 || t.indexOf('update')>-1 || t.indexOf('reboot')>-1) return header('ansible','Patch servers safely — reboot only when required') + `
+- name: Patch & reboot (only if required)
+  hosts: all
+  become: true
+  serial: "25%"            # rolling update: never take the whole fleet down at once
+  tasks:
+    - name: Apply all security updates (Debian/Ubuntu)
+      ansible.builtin.apt:
+        name: "*"
+        state: latest
+        only_upgrade: true
+        update_cache: true
+        cache_valid_time: 3600
+      when: ansible_os_family == "Debian"
+      register: patch_result
+
+    - name: Apply all security updates (RHEL family)
+      ansible.builtin.dnf:
+        name: "*"
+        security: true
+        state: latest
+      when: ansible_os_family == "RedHat"
+
+    - name: Check whether a reboot is required
+      ansible.builtin.stat:
+        path: /var/run/reboot-required
+      register: reboot_flag
+      changed_when: false
+
+    - name: Reboot only when required, and wait for return
+      ansible.builtin.reboot:
+        reboot_timeout: 600
+        test_command: uptime
+      when: reboot_flag.stat.exists | default(false)
+
+    - name: Verify the host is healthy after patching
+      ansible.builtin.wait_for_connection:
+        timeout: 300
+`;
+  if(t.indexOf('harden')>-1 || t.indexOf('user')>-1 || t.indexOf('sudo')>-1) return header('ansible','Harden a Linux server & create a sudo user') + `
+- name: Baseline server hardening
+  hosts: all
+  become: true
+  vars:
+    admin_user: deploy
+    admin_pubkey: "{{ vault_admin_pubkey }}"   # from Ansible Vault — never commit keys/passwords
+  tasks:
+    - name: Create admin user (no password login — key only)
+      ansible.builtin.user:
+        name: "{{ admin_user }}"
+        groups: sudo
+        shell: /bin/bash
+        create_home: true
+        password: "!"                            # locked password = key-only access
+
+    - name: Install the admin SSH public key
+      ansible.posix.authorized_key:
+        user: "{{ admin_user }}"
+        key: "{{ admin_pubkey }}"
+        state: present
+
+    - name: Harden sshd — no root login, no passwords
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+        validate: "sshd -t -f %s"
+      loop:
+        - { regexp: "^#?PermitRootLogin", line: "PermitRootLogin no" }
+        - { regexp: "^#?PasswordAuthentication", line: "PasswordAuthentication no" }
+      notify: Restart sshd
+
+    - name: Enable the firewall, allow SSH only
+      community.general.ufw:
+        state: enabled
+        policy: deny
+    - ansible.builtin.import_tasks: noop.yml
+      when: false
+    - name: Allow SSH
+      community.general.ufw:
+        rule: allow
+        port: "22"
+        proto: tcp
+
+    - name: Install & enable fail2ban
+      ansible.builtin.package:
+        name: fail2ban
+        state: present
+    - name: Ensure fail2ban runs
+      ansible.builtin.service:
+        name: fail2ban
+        state: started
+        enabled: true
+  handlers:
+    - name: Restart sshd
+      ansible.builtin.service:
+        name: sshd
+        state: restarted
+`;
+  return header('ansible','Idempotent automation playbook') + `
+- name: ${'${title}'}
+  hosts: all
+  become: true
+  vars:
+    app_secret: "{{ vault_app_secret }}"   # Vault-encrypted — never plain text in the repo
+  tasks:
+    - name: Ensure required packages are present
+      ansible.builtin.package:
+        name: ["curl", "ca-certificates"]
+        state: present
+
+    - name: Deploy configuration (restarts only on real change)
+      ansible.builtin.template:
+        src: app.conf.j2
+        dest: /etc/app/app.conf
+        mode: "0600"
+        owner: root
+      notify: Restart app
+
+    - name: Ensure the service is running
+      ansible.builtin.service:
+        name: app
+        state: started
+        enabled: true
+  handlers:
+    - name: Restart app
+      ansible.builtin.service:
+        name: app
+        state: restarted
+`.replace('${title}', (p||'Automation task').slice(0,70));
+},
+terraform: function(p){
+  var t=p.toLowerCase();
+  if(t.indexOf('s3')>-1 || t.indexOf('bucket')>-1) return header('terraform','Secure, cost-optimised S3 bucket') + `
+terraform {
+  required_version = ">= 1.5"
+  required_providers { aws = { source = "hashicorp/aws", version = "~> 5.0" } }
+  # backend "s3" { bucket = "my-tf-state" key = "app/terraform.tfstate" encrypt = true dynamodb_table = "tf-locks" }
+}
+provider "aws" { region = var.region }
+variable "region" { type = string, default = "us-east-1" }
+variable "bucket_name" { type = string }   # pass via tfvars/env — never hard-code
+variable "cost_centre" { type = string, default = "platform" }
+locals { tags = { cost-centre = var.cost_centre, managed-by = "terraform", environment = "prod" } }
+
+resource "aws_s3_bucket" "this" {
+  bucket = var.bucket_name
+  tags   = local.tags
+}
+resource "aws_s3_bucket_public_access_block" "this" {
+  bucket                  = aws_s3_bucket.this.id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
+  bucket = aws_s3_bucket.this.id
+  rule {
+    apply_server_side_encryption_by_default { sse_algorithm = "AES256" }
+    bucket_key_enabled = true   # cuts KMS/SSE request cost
+  }
+}
+resource "aws_s3_bucket_versioning" "this" {
+  bucket = aws_s3_bucket.this.id
+  versioning_configuration { status = "Enabled" }
+}
+resource "aws_s3_bucket_lifecycle_configuration" "this" {
+  bucket = aws_s3_bucket.this.id
+  rule {
+    id     = "cost-optimise"
+    status = "Enabled"
+    transition { days = 30, storage_class = "STANDARD_IA" }   # ~45% cheaper
+    transition { days = 90, storage_class = "GLACIER_IR" }    # ~68% cheaper
+    noncurrent_version_expiration { noncurrent_days = 90 }
+    abort_incomplete_multipart_upload { days_after_initiation = 7 }
+  }
+}
+output "bucket_arn" { value = aws_s3_bucket.this.arn }
+`;
+  if(t.indexOf('ec2')>-1 || t.indexOf('instance')>-1) return header('terraform','Cost-optimised EC2 instance — right-sized, encrypted, monitored') + `
+terraform {
+  required_version = ">= 1.5"
+  required_providers { aws = { source = "hashicorp/aws", version = "~> 5.0" } }
+}
+provider "aws" { region = var.region }
+variable "region" { type = string, default = "us-east-1" }
+variable "ami_id" { type = string }                 # pin an approved AMI
+variable "subnet_id" { type = string }
+variable "instance_type" {
+  type    = string
+  default = "t3.micro"   # COST: start small (free-tier eligible) — scale only on measured load
+  validation { condition = contains(["t3.micro","t3.small","t3.medium"], var.instance_type)
+               error_message = "Instance type must stay in the approved cost-controlled list." }
+}
+locals { tags = { cost-centre = "platform", managed-by = "terraform", auto-stop = "nightly" } }
+
+resource "aws_security_group" "this" {
+  name_prefix = "app-"  vpc_id = var.vpc_id
+  ingress { description = "SSH from admin range only" from_port = 22 to_port = 22 protocol = "tcp"
+            cidr_blocks = [var.admin_cidr] }   # NEVER 0.0.0.0/0
+  egress  { description = "HTTPS out only" from_port = 443 to_port = 443 protocol = "tcp" cidr_blocks = ["0.0.0.0/0"] }
+  tags = local.tags
+}
+variable "vpc_id" { type = string } variable "admin_cidr" { type = string }
+
+resource "aws_instance" "this" {
+  ami = var.ami_id  instance_type = var.instance_type  subnet_id = var.subnet_id
+  vpc_security_group_ids = [aws_security_group.this.id]
+  monitoring = true                                   # reliability: detailed metrics on
+  metadata_options { http_tokens = "required" }       # security: IMDSv2 enforced
+  root_block_device { encrypted = true, volume_size = 20, volume_type = "gp3" }  # gp3 = cheaper than gp2
+  tags = merge(local.tags, { Name = "app-server" })
+}
+output "instance_id" { value = aws_instance.this.id }
+`;
+  if(t.indexOf('vpc')>-1 || t.indexOf('network')>-1) return header('terraform','Private-first VPC — public subnets only where needed') + `
+terraform {
+  required_version = ">= 1.5"
+  required_providers { aws = { source = "hashicorp/aws", version = "~> 5.0" } }
+}
+provider "aws" { region = var.region }
+variable "region" { type = string, default = "us-east-1" }
+variable "cidr" { type = string, default = "10.0.0.0/16" }
+locals { tags = { cost-centre = "platform", managed-by = "terraform" } }
+
+resource "aws_vpc" "this" {
+  cidr_block = var.cidr  enable_dns_hostnames = true  enable_dns_support = true
+  tags = merge(local.tags, { Name = "main" })
+}
+resource "aws_default_security_group" "default" {   # lock the default SG down completely
+  vpc_id = aws_vpc.this.id
+}
+resource "aws_flow_log" "this" {                    # reliability/security: network visibility
+  vpc_id = aws_vpc.this.id  traffic_type = "ALL"
+  log_destination_type = "cloud-watch-logs"
+  log_destination = aws_cloudwatch_log_group.flow.arn
+  iam_role_arn = aws_iam_role.flow.arn
+}
+resource "aws_cloudwatch_log_group" "flow" {
+  name = "/vpc/flow-logs"  retention_in_days = 30    # COST: capped retention, not forever
+  tags = local.tags
+}
+resource "aws_iam_role" "flow" {
+  name = "vpc-flow-logs"
+  assume_role_policy = jsonencode({ Version = "2012-10-17", Statement = [{
+    Effect = "Allow", Action = "sts:AssumeRole",
+    Principal = { Service = "vpc-flow-logs.amazonaws.com" } }] })
+  tags = local.tags
+}
+`;
+  if(t.indexOf('rds')>-1 || t.indexOf('database')>-1) return header('terraform','RDS database — encrypted, backed up, private') + `
+terraform {
+  required_version = ">= 1.5"
+  required_providers { aws = { source = "hashicorp/aws", version = "~> 5.0" } }
+}
+provider "aws" { region = var.region }
+variable "region" { type = string, default = "us-east-1" }
+variable "db_password" { type = string, sensitive = true }  # from Secrets Manager / env — never in code
+variable "private_subnet_ids" { type = list(string) }
+variable "vpc_id" { type = string }
+locals { tags = { cost-centre = "platform", managed-by = "terraform" } }
+
+resource "aws_db_subnet_group" "this" { name = "app-db", subnet_ids = var.private_subnet_ids, tags = local.tags }
+resource "aws_security_group" "db" {
+  vpc_id = var.vpc_id
+  ingress { description = "Postgres from app tier only" from_port = 5432 to_port = 5432 protocol = "tcp"
+            security_groups = [] }  # set to the app SG id — no CIDR access at all
+  tags = local.tags
+}
+resource "aws_db_instance" "this" {
+  identifier = "app-db"  engine = "postgres"  engine_version = "16"
+  instance_class = "db.t3.micro"        # COST: start small, scale on metrics
+  allocated_storage = 20  storage_type = "gp3"  storage_encrypted = true
+  username = "appadmin"  password = var.db_password
+  db_subnet_group_name = aws_db_subnet_group.this.name
+  vpc_security_group_ids = [aws_security_group.db.id]
+  publicly_accessible = false
+  multi_az = false                      # set true for prod HA; false keeps dev cost low
+  backup_retention_period = 7
+  deletion_protection = true
+  skip_final_snapshot = false
+  tags = local.tags
+}
+`;
+  return header('terraform','Secure-by-default infrastructure') + `
+terraform {
+  required_version = ">= 1.5"
+  required_providers { aws = { source = "hashicorp/aws", version = "~> 5.0" } }
+}
+provider "aws" { region = var.region }
+variable "region" { type = string, default = "us-east-1" }
+variable "name" { type = string }
+locals { tags = { cost-centre = "platform", managed-by = "terraform", resource = var.name } }
+
+# Pattern to copy for every resource you add:
+#  1. encrypted = true            2. no public access by default
+#  3. least-privilege IAM         4. tags from local.tags (cost tracking)
+#  5. lifecycle / retention rules so nothing bills forever unnoticed
+resource "aws_cloudwatch_log_group" "app" {
+  name = "/app/${"$"}{var.name}"
+  retention_in_days = 30   # COST: capped retention
+  tags = local.tags
+}
+`;
+},
+cloudformation: function(p){
+  var t=p.toLowerCase();
+  if(t.indexOf('s3')>-1 || t.indexOf('bucket')>-1) return header('cloudformation','Secure, cost-optimised S3 bucket (CloudFormation)') + `
+AWSTemplateFormatVersion: "2010-09-09"
+Description: S3 bucket — encrypted, private, versioned, with lifecycle cost rules
+Parameters:
+  BucketName:
+    Type: String
+    Description: Globally unique bucket name — pass it in, never bake environment names into the template
+  CostCentre:
+    Type: String
+    Default: platform
+Resources:
+  Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref BucketName
+      # Encryption at rest (SSE-S3) — no extra cost, on by default
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+            BucketKeyEnabled: true   # cuts SSE request cost
+      # Block ALL public access
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      VersioningConfiguration:
+        Status: Enabled
+      # COST: infrequent data -> STANDARD_IA at 30d, Glacier at 90d, expire old versions
+      LifecycleConfiguration:
+        Rules:
+          - Id: cost-optimise
+            Status: Enabled
+            Transitions:
+              - StorageClass: STANDARD_IA
+                TransitionInDays: 30
+              - StorageClass: GLACIER_IR
+                TransitionInDays: 90
+            NoncurrentVersionExpiration:
+              NoncurrentDays: 90
+            AbortIncompleteMultipartUpload:
+              DaysAfterInitiation: 7
+      Tags:
+        - Key: cost-centre
+          Value: !Ref CostCentre
+        - Key: managed-by
+          Value: cloudformation
+Outputs:
+  BucketArn:
+    Description: ARN of the created bucket
+    Value: !GetAtt Bucket.Arn
+`;
+  if(t.indexOf('ec2')>-1 || t.indexOf('instance')>-1) return header('cloudformation','Cost-optimised EC2 instance — right-sized, encrypted, monitored (CloudFormation)') + `
+AWSTemplateFormatVersion: "2010-09-09"
+Description: EC2 instance — cost-capped types, IMDSv2 enforced, encrypted gp3 disk, SSH restricted
+Parameters:
+  AmiId:
+    Type: AWS::EC2::Image::Id
+    Description: Pin an approved AMI
+  SubnetId:
+    Type: AWS::EC2::Subnet::Id
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+  AdminCidr:
+    Type: String
+    Description: CIDR allowed SSH access — NEVER 0.0.0.0/0
+  InstanceType:
+    Type: String
+    Default: t3.micro   # COST: start small (free-tier eligible) — scale only on measured load
+    AllowedValues: [t3.micro, t3.small, t3.medium]   # cost-controlled list only
+Resources:
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: App server — SSH from admin range only, HTTPS out
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Ref AdminCidr
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+          Description: HTTPS out only
+      Tags:
+        - Key: cost-centre
+          Value: platform
+        - Key: managed-by
+          Value: cloudformation
+  Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref AmiId
+      InstanceType: !Ref InstanceType
+      SubnetId: !Ref SubnetId
+      SecurityGroupIds: [!Ref InstanceSecurityGroup]
+      Monitoring: true                    # reliability: detailed metrics on
+      MetadataOptions:
+        HttpTokens: required              # security: IMDSv2 enforced
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            Encrypted: true
+            VolumeSize: 20
+            VolumeType: gp3               # gp3 = cheaper than gp2
+            DeleteOnTermination: true
+      Tags:
+        - Key: Name
+          Value: app-server
+        - Key: cost-centre
+          Value: platform
+        - Key: managed-by
+          Value: cloudformation
+        - Key: auto-stop
+          Value: nightly
+Outputs:
+  InstanceId:
+    Value: !Ref Instance
+`;
+  if(t.indexOf('rds')>-1 || t.indexOf('database')>-1) return header('cloudformation','RDS database — encrypted, backed up, private (CloudFormation)') + `
+AWSTemplateFormatVersion: "2010-09-09"
+Description: RDS PostgreSQL — encrypted, private subnets only, backups on, deletion protected
+Parameters:
+  DBPassword:
+    Type: String
+    NoEcho: "true"   # secret passed at deploy time / from Secrets Manager — never a Default in the template
+    Description: Master password (min 8 chars)
+    MinLength: 8
+  PrivateSubnetIds:
+    Type: List<AWS::EC2::Subnet::Id>
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+  AppSecurityGroupId:
+    Type: AWS::EC2::SecurityGroup::Id
+    Description: Only this security group may reach the database — no CIDR access at all
+Resources:
+  DBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: App DB private subnets
+      SubnetIds: !Ref PrivateSubnetIds
+      Tags:
+        - Key: cost-centre
+          Value: platform
+        - Key: managed-by
+          Value: cloudformation
+  DBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Postgres from the app tier only
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          SourceSecurityGroupId: !Ref AppSecurityGroupId
+      Tags:
+        - Key: cost-centre
+          Value: platform
+  DBInstance:
+    Type: AWS::RDS::DBInstance
+    DeletionPolicy: Retain   # deleting the stack never drops the database
+    Properties:
+      DBInstanceIdentifier: app-db
+      Engine: postgres
+      EngineVersion: "16"
+      DBInstanceClass: db.t3.micro        # COST: start small, scale on metrics
+      AllocatedStorage: "20"
+      StorageType: gp3
+      StorageEncrypted: true
+      MasterUsername: appadmin
+      MasterUserPassword: !Ref DBPassword
+      DBSubnetGroupName: !Ref DBSubnetGroup
+      VPCSecurityGroups: [!Ref DBSecurityGroup]
+      PubliclyAccessible: false
+      MultiAZ: false                      # set true for prod HA; false keeps dev cost low
+      BackupRetentionPeriod: 7
+      DeletionProtection: true
+      Tags:
+        - Key: cost-centre
+          Value: platform
+        - Key: managed-by
+          Value: cloudformation
+Outputs:
+  DBEndpoint:
+    Value: !GetAtt DBInstance.Endpoint.Address
+`;
+  return header('cloudformation','Secure-by-default CloudFormation stack') + `
+AWSTemplateFormatVersion: "2010-09-09"
+Description: ${'${title}'} — starting stack with secure, reliable, cost-aware defaults
+Parameters:
+  Name:
+    Type: String
+    Description: Short name used in resource names and tags
+  CostCentre:
+    Type: String
+    Default: platform
+# Pattern to copy for every resource you add:
+#  1. Encryption on (BucketEncryption / StorageEncrypted / Ebs Encrypted)
+#  2. No public access by default (PublicAccessBlockConfiguration, no 0.0.0.0/0 ingress)
+#  3. Secrets as NoEcho parameters or Secrets Manager references — never Defaults in the template
+#  4. Tags on everything (cost-centre + managed-by) so spend is attributable
+#  5. Lifecycle / retention rules so nothing bills forever unnoticed
+Resources:
+  AppLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Join ["", ["/app/", !Ref Name]]
+      RetentionInDays: 30   # COST: capped retention, not forever
+      Tags:
+        - Key: cost-centre
+          Value: !Ref CostCentre
+        - Key: managed-by
+          Value: cloudformation
+Outputs:
+  LogGroupName:
+    Value: !Ref AppLogGroup
+`.replace('${title}', (p||'Automation stack').slice(0,70));
+},
+powershell: function(p){
+  var t=p.toLowerCase();
+  if(t.indexOf('user')>-1 || t.indexOf('active directory')>-1 || t.indexOf('ad ')>-1 || t.indexOf('csv')>-1) return header('powershell','Create AD users from CSV — validated, logged, -WhatIf safe') + `
+[CmdletBinding(SupportsShouldProcess)]
+param(
+    [Parameter(Mandatory)][string]$CsvPath,
+    [string]$LogPath = "C:\\Logs\\NewUsers-$(Get-Date -Format yyyyMMdd).log"
+)
+$ErrorActionPreference = "Stop"
+Start-Transcript -Path $LogPath -Append | Out-Null
+try {
+    Import-Module ActiveDirectory
+    $users = Import-Csv -Path $CsvPath
+    foreach ($u in $users) {
+        if (-not $u.SamAccountName -or -not $u.Name) {
+            Write-Warning "Skipping row with missing Name/SamAccountName: $($u | ConvertTo-Json -Compress)"
+            continue
+        }
+        if (Get-ADUser -Filter "SamAccountName -eq '$($u.SamAccountName)'" -ErrorAction SilentlyContinue) {
+            Write-Host "Already exists, skipping: $($u.SamAccountName)" -ForegroundColor Yellow
+            continue   # idempotent: re-running the script is safe
+        }
+        # Password generated & forced to change at logon — never plain text in the CSV or script
+        $tempPassword = ConvertTo-SecureString ([System.Web.Security.Membership]::GeneratePassword(20, 4)) -AsPlainText -Force
+        if ($PSCmdlet.ShouldProcess($u.SamAccountName, "Create AD user")) {
+            New-ADUser -Name $u.Name -SamAccountName $u.SamAccountName -UserPrincipalName $u.UserPrincipalName -Department $u.Department -Enabled $true -AccountPassword $tempPassword -ChangePasswordAtLogon $true
+            Write-Host "Created: $($u.SamAccountName)" -ForegroundColor Green
+        }
+    }
+} catch {
+    Write-Error "User creation failed: $_"
+    throw
+} finally {
+    Stop-Transcript | Out-Null
+}
+`;
+  if(t.indexOf('clean')>-1 || t.indexOf('disk')>-1 || t.indexOf('old file')>-1) return header('powershell','Clean up old files & report space saved — safe defaults') + `
+[CmdletBinding(SupportsShouldProcess)]
+param(
+    [string]$Path = "C:\\Temp",
+    [int]$OlderThanDays = 30,
+    [switch]$ArchiveOnly   # default behaviour only reports; pass -ArchiveOnly:$false to delete
+)
+$ErrorActionPreference = "Stop"
+$cutoff = (Get-Date).AddDays(-$OlderThanDays)
+$files = Get-ChildItem -Path $Path -Recurse -File | Where-Object { $_.LastWriteTime -lt $cutoff }
+$totalMB = [math]::Round(($files | Measure-Object Length -Sum).Sum / 1MB, 1)
+Write-Host "Found $($files.Count) files older than $OlderThanDays days — $totalMB MB total."
+
+foreach ($f in $files) {
+    if ($PSCmdlet.ShouldProcess($f.FullName, "Remove old file")) {
+        try { Remove-Item -LiteralPath $f.FullName -Force -ErrorAction Stop }
+        catch { Write-Warning "Could not remove $($f.FullName): $_" }  # log & continue, don't abort the run
+    }
+}
+# Always show the before/after so the saving is auditable
+Get-PSDrive -Name ([IO.Path]::GetPathRoot($Path).TrimEnd(':\\')) |
+    Select-Object Name, @{n='FreeGB';e={[math]::Round($_.Free/1GB,1)}}
+`;
+  if(t.indexOf('service')>-1 || t.indexOf('restart')>-1) return header('powershell','Check & restart a Windows service — with logging and verification') + `
+[CmdletBinding(SupportsShouldProcess)]
+param([Parameter(Mandatory)][string]$ServiceName)
+$ErrorActionPreference = "Stop"
+$log = "C:\\Logs\\ServiceCheck-$(Get-Date -Format yyyyMMdd).log"
+function Write-Log($msg) { "$(Get-Date -Format s)  $msg" | Tee-Object -FilePath $log -Append }
+
+try {
+    $svc = Get-Service -Name $ServiceName
+    Write-Log "Service $ServiceName is $($svc.Status)"
+    if ($svc.Status -ne "Running") {
+        if ($PSCmdlet.ShouldProcess($ServiceName, "Start service")) {
+            Start-Service -Name $ServiceName
+            $svc.WaitForStatus("Running", [TimeSpan]::FromSeconds(60))  # verify — don't assume
+            Write-Log "Service $ServiceName started and verified Running."
+        }
+    } else {
+        Write-Log "No action needed."
+    }
+} catch {
+    Write-Log "ERROR: $_"
+    throw
+}
+`;
+  return header('powershell','Safe administration script — WhatIf, logging, error handling') + `
+[CmdletBinding(SupportsShouldProcess)]
+param(
+    [Parameter(Mandatory)][string]$Target,
+    [string]$LogPath = "C:\\Logs\\Admin-$(Get-Date -Format yyyyMMdd).log"
+)
+$ErrorActionPreference = "Stop"   # fail loudly, never silently
+function Write-Log($msg) { "$(Get-Date -Format s)  $msg" | Tee-Object -FilePath $LogPath -Append }
+try {
+    Write-Log "Starting task against $Target (WhatIf=$WhatIfPreference)"
+    # TODO: add your steps here. Wrap destructive actions in:
+    #   if ($PSCmdlet.ShouldProcess($Target, "Describe the change")) { ... }
+    # so -WhatIf always previews safely before anything changes.
+    Write-Log "Completed successfully."
+} catch {
+    Write-Log "ERROR: $_"
+    throw
+}
+`;
+}
+};
+
+/* Buggy samples */
+var BUGGY = {
+python: 'import requests\npassword = "SuperSecret123"\napi_key = "AKIAIOSFODNN7EXAMPLE"\n\ndef get_data():\n    data = requests.get("http://api.example.com/data")\n    print(data.text)\n    return data.json()\n\ntry:\n    result = eval(input("enter expression: "))\nexcept:\n    print("something failed")\n\nget_data()\n',
+ansible: '---\n- hosts: all\n  tasks:\n    - name: Install package with shell\n      shell: apt-get install -y nginx\n    - name: Set admin password\n      user: name=admin password=Password123\n    - name: Download installer\n      get_url: url=http://example.com/install.sh dest=/tmp/install.sh\n    - name: Run installer and ignore failures\n      shell: bash /tmp/install.sh\n      ignore_errors: yes\n',
+terraform: 'resource "aws_s3_bucket" "data" {\n  bucket = "my-company-data"\n  acl    = "public-read"\n}\nresource "aws_security_group" "web" {\n  ingress {\n    from_port   = 22\n    to_port     = 22\n    protocol    = "tcp"\n    cidr_blocks = ["0.0.0.0/0"]\n  }\n}\nresource "aws_instance" "big" {\n  ami           = "ami-12345678"\n  instance_type = "m5.8xlarge"\n}\nvariable "db_password" {\n  default = "Password123!"\n}\n',
+powershell: '$password = "Password123"\n$cred = New-Object PSCredential("admin", (ConvertTo-SecureString $password -AsPlainText -Force))\nInvoke-Expression $userCommand\nRemove-Item C:\\Data\\* -Recurse -Force\nGet-Service Spooler | Restart-Service -Force\nWrite-Host "done"\n'
+,
+cloudformation: 'AWSTemplateFormatVersion: "2010-09-09"\nDescription: Company data bucket and web server\nParameters:\n  DBPassword:\n    Type: String\n    Default: Password123!\nResources:\n  DataBucket:\n    Type: AWS::S3::Bucket\n    Properties:\n      BucketName: my-company-data\n      AccessControl: PublicRead\n  WebSecurityGroup:\n    Type: AWS::EC2::SecurityGroup\n    Properties:\n      GroupDescription: Web server\n      SecurityGroupIngress:\n        - IpProtocol: tcp\n          FromPort: 22\n          ToPort: 22\n          CidrIp: 0.0.0.0/0\n  WebServer:\n    Type: AWS::EC2::Instance\n    Properties:\n      ImageId: ami-12345678\n      InstanceType: m5.8xlarge\n'
+};
+
+var SAMPLE_ERRORS = {
+python: 'Traceback (most recent call last):\n  File "main.py", line 6, in get_data\n    data = requests.get("http://api.example.com/data")\nrequests.exceptions.ConnectTimeout: HTTPConnectionPool(host=\'api.example.com\', port=80): Connection to api.example.com timed out. (connect timeout=None)',
+ansible: 'TASK [Download installer] ******************************************************\nfatal: [web1]: FAILED! => {"changed": false, "msg": "Failed to download https://example.com/install.sh: Connection failure — plain HTTP download could not be verified"}\nPLAY RECAP: web1 : ok=1 changed=0 unreachable=0 failed=1',
+terraform: 'Error: creating S3 Bucket (my-company-data) ACL: AccessDenied: User is not authorized to perform: s3:PutBucketAcl\n  with aws_s3_bucket.data,\n  on main.tf line 1, in resource "aws_s3_bucket" "data":\n   1: resource "aws_s3_bucket" "data" {',
+powershell: 'Invoke-Expression : Cannot bind argument to parameter \'Command\' because it is an empty string.\nAt C:\\Scripts\\script.ps1:3 char:1\n+ Invoke-Expression $userCommand\n+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n    + CategoryInfo : InvalidData: (:) [Invoke-Expression], ParameterBindingValidationException'
+,
+cloudformation: 'The following resource(s) failed to create: [DataBucket]. Rollback requested by user.\nAPI: s3:CreateBucket AccessDenied: User: arn:aws:iam::123456789012:user/deployer is not authorized to perform: s3:CreateBucket on resource: "arn:aws:s3:::my-company-data"'
+};
+
+function escHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function analyseError(errorText, code, lang){
+  var findings=[], matched=null;
+  if(!errorText || !errorText.trim()) return {findings:findings, matched:matched};
+  var e = errorText;
+  var el = e.toLowerCase();
+  var lineMatch = e.match(/line\s+(\d+)/i) || e.match(/main\.tf line\s+(\d+)/i) || e.match(/script\.ps1:(\d+)/i);
+  var lineNo = lineMatch ? parseInt(lineMatch[1],10) : null;
+  var codeLines = code.split('\n');
+  var lineCode = (lineNo && codeLines[lineNo-1]) ? codeLines[lineNo-1].trim() : '';
+  if(lineNo) matched = {line:lineNo, code:lineCode};
+
+  if(/syntaxerror|indentationerror|parse error|unexpected token|invalid syntax/.test(el)){
+    findings.push({sev:'High',cat:'Reliability',msg:'Your error is a syntax / parse error'+(lineNo?' at line '+lineNo:'')+(lineCode?': "'+lineCode+'"':'')+' — the code cannot run at all until the syntax on that line is fixed. Check brackets, quotes, colons and indentation there first.'});
+  }
+  if(/modulenotfounderror|importerror|no module named|commandnotfound|cannot find.*module|the term .* is not recognized/.test(el)){
+    var mod = e.match(/No module named ['"]([^'"]+)['"]/) || e.match(/NoModule[^:]*:\s*(\S+)/);
+    findings.push({sev:'High',cat:'Reliability',msg:'Your error is a missing module / command'+(mod?' ("'+mod[1]+'")':'')+' — it is imported or called but not installed / not available in this environment. Install it, add it to your requirements, or guard the import.'});
+  }
+  if(/timeout|timed out|readtimeout|connecttimeout/.test(el)){
+    findings.push({sev:'High',cat:'Reliability',msg:'Your error is a timeout'+(lineNo?' (line '+lineNo+')':'')+' — this matches a network call with no (or too short a) timeout in the code. The fix applied below adds an explicit timeout and retries so the call fails fast and recovers instead of hanging.'});
+  }
+  if(/accessdenied|access denied|unauthorized|not authorized|403|authentication failed|permission denied|forbidden/.test(el)){
+    findings.push({sev:'High',cat:'Security',msg:'Your error is an access / permission failure — the identity running this code does not have permission for that action, or the resource blocks public/unauthenticated access. Check IAM / role permissions and credentials; do not fix this by making the resource public.'});
+  }
+  if(/nameerror|is not defined|not recognized as the name|variable.*not found|cannot find.*variable/.test(el)){
+    findings.push({sev:'Medium',cat:'Reliability',msg:'Your error points to an undefined name / variable'+(lineNo?' at line '+lineNo:'')+' — it is used before it is defined, misspelled, or missing from your environment/variables. Define it (or load it from the environment) before that line.'});
+  }
+  if(/keyerror|indexerror|attributeerror|typeerror|null.*reference|object reference not set/.test(el)){
+    findings.push({sev:'Medium',cat:'Reliability',msg:'Your error is a data-shape error at runtime — a key, index, attribute or value the code expected was missing or the wrong type. Validate the data before using it and handle the missing case explicitly.'});
+  }
+  if(/connection|failed to download|could not resolve|name or service not known|network unreachable/.test(el) && !/timeout/.test(el)){
+    findings.push({sev:'Medium',cat:'Reliability',msg:'Your error is a connection / download failure — check the URL (HTTPS, not HTTP), DNS, firewall/proxy, and that the endpoint is reachable from where this runs.'});
+  }
+  if(/password|credential|secret/.test(el) && /fail|invalid|expired|denied/.test(el)){
+    findings.push({sev:'Medium',cat:'Security',msg:'Your error mentions credentials — the supplied password/key was rejected, expired, or in the wrong format. Rotate it, load it from a vault / environment (never hard-code it), and retry.'});
+  }
+  if(!findings.length){
+    findings.push({sev:'Medium',cat:'Reliability',msg:'Error paired with your code: "'+e.trim().split('\n')[0].slice(0,160)+'" — start at '+(lineNo?'line '+lineNo+' in the editor':'the last line of the error (the actual exception)')+', work backwards through the lines it names, and cross-check them against the pattern findings below.'});
+  }
+  return {findings:findings, matched:matched};
+}
+
+/* ---------------- ANALYSIS ENGINE ---------------- */
+function analyse(code, lang){
+  var issues=[], fixed=code, sec=100, rel=100, cost=100;
+  function add(sev, cat, msg, fix){ issues.push({sev:sev,cat:cat,msg:msg}); if(cat==='Security') sec-=(sev==='High'?28:sev==='Medium'?14:6); if(cat==='Reliability') rel-=(sev==='High'?28:sev==='Medium'?14:6); if(cat==='Cost') cost-=(sev==='High'?24:sev==='Medium'?12:5); }
+  var has = function(re){ return re.test(code); };
+  // Universal
+  if(/(password|passwd|secret|api[_-]?key|token)\s*[:=]\s*["'][^"'\n]{4,}["']/i.test(code) && !/vault|environ|os\.environ|var\.|sensitive|SecureString(?!.*AsPlainText)/i.test(code.split('\n').filter(function(l){return /(password|secret|api[_-]?key)\s*[:=]\s*["']/i.test(l);}).join(' ')+'KEEP')===false){}
+  if(/["'](?:Password|password|SuperSecret|letmein)[^"']*["']/.test(code) || /(password|api_key|secret)\s*=\s*["'][A-Za-z0-9!@#$%^&*]{6,}["']/.test(code) || /default\s*=\s*"[^"]*[Pp]assword/.test(code)){
+    add('High','Security','Hard-coded credential found in the code. Anyone with repo access owns this secret — and it lives in git history forever.');
+    fixed = fixed.replace(/(password\s*=\s*)"[^"]*"/gi,'$1os.environ["APP_PASSWORD"]')
+                   .replace(/(api_key\s*=\s*)"[^"]*"/gi,'$1os.environ["API_KEY"]')
+                   .replace(/default\s*=\s*"[^"]*"/,'default = null # supply via TF_VAR / Secrets Manager');
+  }
+  if(lang==='python'){
+    if(has(/\beval\s*\(|\bexec\s*\(/)){ add('High','Security','eval() / exec() executes arbitrary input — a direct remote-code-execution risk.'); fixed=fixed.replace(/\beval\s*\(/,'ast.literal_eval('); if(fixed.indexOf('import ast')<0) fixed='import ast\n'+fixed; }
+    if(has(/requests\.(get|post|put|delete)\([^)]*\)/) && !has(/timeout\s*=/)){ add('Medium','Reliability','HTTP call with no timeout — the script can hang forever on a slow endpoint.'); fixed=fixed.replace(/requests\.(get|post)\(([^)]*)\)/,'requests.$1($2, timeout=(5, 30))'); }
+    if(has(/http:\/\//) && !has(/localhost/)){ add('Medium','Security','Plain HTTP URL — traffic (and any token in it) is visible in transit. Use HTTPS.'); fixed=fixed.replace(/http:\/\//g,'https://'); }
+    if(has(/except\s*:/)){ add('Medium','Reliability','Bare "except:" swallows every error including KeyboardInterrupt and real bugs — failures become invisible.'); fixed=fixed.replace(/except\s*:/,'except Exception as exc:'); }
+    if(has(/\bprint\s*\(/) && !has(/logging/)){ add('Low','Reliability','Uses print() instead of logging — no timestamps, levels, or log files when it runs unattended.'); }
+    if(!has(/if __name__/)){ add('Low','Reliability','No if __name__ == "__main__" guard — importing this file would run it immediately.'); }
+    if(has(/logging/) && has(/timeout/)) { /* good */ }
+  }
+  if(lang==='terraform'){
+    if(has(/0\.0\.0\.0\/0/) && has(/ingress/)){ add('High','Security','Security group open to 0.0.0.0/0 — the whole internet can reach this port. Restrict to your admin/VPN range.'); }
+    if(has(/public-read|publicly_accessible\s*=\s*true/)){ add('High','Security','Publicly accessible resource detected — data exposure risk. Make it private and use signed URLs / IAM access.'); fixed=fixed.replace(/acl\s*=\s*"public-read"/,'# acl removed: bucket is private; access via IAM + aws_s3_bucket_public_access_block'); }
+    if(!has(/encrypt/)){ add('Medium','Security','No encryption configured — add storage_encrypted / server-side encryption.'); }
+    if(!has(/tags/)){ add('Medium','Cost','No tags — this spend will be invisible in cost reports and impossible to attribute.'); }
+    if(has(/instance_type\s*=\s*"(m5|c5|r5)\.(4xlarge|8xlarge|12xlarge|16xlarge)/)){ add('Medium','Cost','Very large instance type with no justification — likely 8–30× the cost of a right-sized instance. Start small and scale on metrics.'); }
+    if(has(/aws_s3_bucket/) && !has(/lifecycle/)){ add('Low','Cost','S3 bucket with no lifecycle rule — storage grows (and bills) forever. Add transitions to IA/Glacier.'); }
+    if(!has(/required_version|required_providers/)){ add('Low','Reliability','No provider/version pinning — a future provider release can break this plan unexpectedly.'); }
+  }
+  if(lang==='ansible'){
+    if(has(/^\s*-?\s*shell:|^\s*shell:/m) || has(/\bshell:/)){ add('Medium','Reliability','Using shell/command for work a module does better — not idempotent, so re-running can break or duplicate state. Prefer package/file/service modules.'); }
+    if(has(/ignore_errors\s*:\s*(yes|true)/)){ add('Medium','Reliability','ignore_errors hides real failures — the playbook reports success while the server is broken. Handle the error or use failed_when deliberately.'); }
+    if(has(/password\s*[:=]\s*\S+/) && !has(/vault/)){ add('High','Security','Plain-text password in the playbook. Move it to Ansible Vault and reference it as a variable.'); fixed=fixed.replace(/password\s*=\s*\S+/,'password: "{{ vault_admin_password }}"'); fixed=fixed.replace(/password=Password123/,'password="{{ vault_admin_password }}"'); }
+    if(has(/http:\/\//)){ add('Medium','Security','Download over plain HTTP — the file can be tampered with in transit. Use HTTPS and a checksum.'); fixed=fixed.replace(/http:\/\//g,'https://'); }
+    if(!has(/become\s*:/)){ add('Low','Reliability','No become: declared — privilege behaviour is implicit and may differ between hosts.'); }
+    if(!has(/handler/i) && has(/service:/)){ add('Low','Reliability','Service restarts inline instead of via handlers — restarts happen even when nothing changed.'); }
+  }
+  if(lang==='powershell'){
+    if(has(/Invoke-Expression|iex\b/i)){ add('High','Security','Invoke-Expression executes a string as code — if any part comes from input, that is code injection. Call the command directly.'); }
+    if(has(/AsPlainText/)){ add('High','Security','Password handled as plain text (ConvertTo-SecureString -AsPlainText). Use a credential prompt, vault, or managed identity.'); }
+    if(has(/Remove-Item[^\\n]*-Force/) && !has(/ShouldProcess|SupportsShouldProcess/)){ add('High','Reliability','Recursive delete with -Force and no -WhatIf / ShouldProcess protection — one wrong path wipes data with no preview.'); }
+    if(!has(/try\s*\{/)){ add('Medium','Reliability','No try/catch and $ErrorActionPreference is not set — failures pass silently.'); }
+    if(!has(/Write-(Host|Output|Information|Verbose)?.*log|Start-Transcript|Tee-Object/i) && !has(/Write-Host/)){ add('Low','Reliability','No logging — nothing to audit after the run.'); }
+    if(has(/Restart-Service[^\\n]*-Force/) && !has(/WaitForStatus|Get-Service/)){ add('Low','Reliability','Service restarted without verifying it came back up. Check status after restart.'); }
+  }
+  if(lang==='cloudformation'){
+    if(has(/SecurityGroupIngress:[\s\S]{0,150}0\.0\.0\.0\/0/) || has(/AWS::EC2::SecurityGroupIngress[\s\S]{0,300}0\.0\.0\.0\/0/) || has(/SecurityGroupIngress:[\s\S]{0,150}::\/0/)){ add('High','Security','Security group ingress open to the whole internet (0.0.0.0/0). Restrict CidrIp to your admin/VPN range, or use a source security group instead.'); }
+    if(has(/AccessControl:\s*PublicRead/)){ add('High','Security','Bucket AccessControl is PublicRead — anyone on the internet can read this data. Set it to Private and add a PublicAccessBlockConfiguration.'); fixed=fixed.replace(/AccessControl:\s*PublicReadWrite/g,'AccessControl: Private').replace(/AccessControl:\s*PublicRead/g,'AccessControl: Private'); }
+    if(has(/Password/) && !has(/NoEcho/)){ add('High','Security','A password appears with no NoEcho parameter — its value is visible in plain text in the console, stack events, and (where a Default is set) the template itself, which lives in git history. Set NoEcho: "true" and source the secret from Secrets Manager.'); fixed=fixed.replace(/\n(\s*)Default:\s*[^\n]*[Pp]assword[^\n]*/,'\n$1NoEcho: "true"  # default removed: pass the secret at deploy time'); }
+    if(!has(/BucketEncryption|StorageEncrypted|KmsKeyId|Encrypted:\s*true/)){ add('Medium','Security','No encryption configured — enable BucketEncryption on buckets, StorageEncrypted on RDS, and Encrypted on EBS volumes.'); }
+    if(has(/AWS::S3::Bucket/) && !has(/PublicAccessBlockConfiguration/)){ add('Medium','Security','Bucket has no PublicAccessBlockConfiguration — it is one mistaken policy away from public exposure. Add the block with all four settings true.'); }
+    if(!has(/Tags:/)){ add('Medium','Cost','No tags — this spend will be invisible in cost reports and impossible to attribute. Add cost-centre / managed-by tags.'); }
+    if(has(/InstanceType:\s*(m5|c5|r5)\.(4xlarge|8xlarge|12xlarge|16xlarge)/)){ add('Medium','Cost','Very large instance type with no justification — likely 8–30× the cost of a right-sized instance. Start small and scale on metrics.'); }
+    if(has(/AWS::S3::Bucket/) && !has(/LifecycleConfiguration/)){ add('Low','Cost','S3 bucket with no LifecycleConfiguration — storage grows (and bills) forever. Add transitions to STANDARD_IA / GLACIER_IR.'); }
+    if(has(/AWS::RDS::DBInstance/) && !has(/DeletionProtection:\s*true/)){ add('Low','Reliability','RDS instance without DeletionProtection — a stray stack update or delete can drop the database. Enable it for anything that matters.'); }
+    if(!has(/AWSTemplateFormatVersion/)){ add('Low','Reliability','No AWSTemplateFormatVersion declared — always pin it so template behaviour does not drift between deploys.'); }
+  }
+  // positives
+  var positives=[];
+  if(/encrypt/i.test(code)) positives.push('Encryption is configured');
+  if(/logging|Write-Log|Start-Transcript|handlers/i.test(code)) positives.push('Logging / handlers present');
+  if(/timeout|WaitForStatus|retries|Retry/i.test(code)) positives.push('Timeouts / retries / verification present');
+  if(/lifecycle|retention_in_days/i.test(code)) positives.push('Lifecycle / retention rule controls long-term cost');
+  if(/vault|environ|sensitive\s*=\s*true/i.test(code)) positives.push('Secrets come from a vault / environment, not code');
+  if(/0\.0\.0\.0\/0/.test(code)===false && (lang==='terraform' || lang==='cloudformation')) positives.push('No world-open ingress rules');
+  sec=Math.max(5,Math.min(100,sec)); rel=Math.max(5,Math.min(100,rel)); cost=Math.max(5,Math.min(100,cost));
+  return {issues:issues, fixed:fixed, scores:{Security:sec,Reliability:rel,Cost:cost}, positives:positives};
+}
+
+function explainCode(code, lang){
+  var lines = code.split('\n').filter(function(l){return l.trim().length>0;});
+  var bullets=[], flow=[];
+  var add=function(b){ if(bullets.indexOf(b)<0) bullets.push(b); };
+  lines.slice(0,120).forEach(function(l){
+    var t=l.trim();
+    if(/^import |^from .* import/.test(t)) add('Loads the <code class="inline">'+t.replace(/</g,'&lt;')+'</code> library/module so its functions can be used.');
+    else if(/^#/.test(t) && t.length>12) add('Note from the author: <em>'+t.replace(/^#+\s*/,'').replace(/</g,'&lt;')+'</em>');
+    else if(/def (\w+)/.test(t)) add('Defines a reusable function <code class="inline">'+t.match(/def (\w+)/)[1]+'()</code>.');
+    else if(/resource "([^"]+)" "([^"]+)"/.test(t)) add('Declares a <code class="inline">'+t.match(/resource "([^"]+)"/)[1]+'</code> resource named <b>'+t.match(/resource "[^"]+" "([^"]+)"/)[1]+'</b> — Terraform will create and manage it.');
+    else if(/Type:\s*(AWS::[\w:]+)/.test(t)) add('Creates an AWS resource of type <code class="inline">'+t.match(/Type:\s*(AWS::[\w:]+)/)[1]+'</code> — CloudFormation provisions and manages it as part of the stack.');
+    else if(/NoEcho/.test(t)) add('Marks a parameter <b>NoEcho</b> — its value (a secret) is masked in the console and stack events.');
+    else if(/DeletionPolicy:\s*Retain/.test(t)) add('Sets DeletionPolicy to Retain — deleting the stack will not delete this resource or its data.');
+    else if(/PublicAccessBlockConfiguration/.test(t)) add('Adds a public access block — every public route to this resource is closed off.');
+    else if(/variable "([^"]+)"/.test(t)) add('Declares an input variable <code class="inline">'+t.match(/variable "([^"]+)"/)[1]+'</code> so values can change without editing the code.');
+    else if(/^- name:/.test(t)) add('Ansible task: <b>'+t.replace(/^- name:\s*/,'')+'</b>.');
+    else if(/ansible\.builtin\.(\w+)|community\.general\.(\w+)/.test(t)) add('Uses an Ansible module to make that change idempotently (safe to re-run).');
+    else if(/^\[CmdletBinding/.test(t)) add('Makes this an advanced PowerShell script — it gains -WhatIf preview and -Confirm safety prompts.');
+    else if(/^param\(/.test(t)) add('Declares the script parameters — the inputs a user must (or may) supply when running it.');
+    else if(/function (\w+)[-\w]*/.test(t)) add('Defines a PowerShell/Python helper function <code class="inline">'+(t.match(/function ([\w-]+)/)||t.match(/def (\w+)/)||[])[1]+'</code>.');
+    else if(/try\s*\{|try:/.test(t)) add('Opens an error-handling block — if something inside fails, it is caught and logged instead of crashing silently.');
+    else if(/lifecycle|Transitions|retention/i.test(t)) add('Applies a lifecycle / retention rule — older data is moved to cheaper storage or expired automatically (cost control).');
+    else if(/encrypt/i.test(t)) add('Turns on encryption, so data at rest cannot be read without authorised keys.');
+    else if(/public_access|BlockPublic|publicly_accessible/i.test(t)) add('Blocks public access — the resource is only reachable with explicit IAM/authorised access.');
+  });
+  if(!bullets.length) bullets.push('This is a '+(lang==='terraform'?'declarative infrastructure definition':lang==='ansible'?'declarative configuration playbook':'script')+' — read it top to bottom: setup first, then the work, then cleanup/logging.');
+  if(lang==='python') flow=['Load libraries &amp; read config/secrets from the environment','Run the main task function(s) — each AWS/API call uses timeouts and retries','Log every step; on failure, log the full error and exit with a non-zero code so schedulers/CI notice'];
+  else if(lang==='terraform') flow=['Terraform reads variables (region, names, secrets passed in — not stored in code)','Builds a plan comparing desired vs. current state','Applies only the difference: creates/updates the resources above, with encryption, tags, and access controls attached'];
+  else if(lang==='ansible') flow=['Ansible connects to the target hosts over SSH/WinRM with privilege escalation (become)','Each task checks current state first — it only changes what differs (idempotent)','Handlers restart services only if a config task actually changed something, then health checks confirm the result'];
+  else if(lang==='cloudformation') flow=['You submit the template to CloudFormation, passing parameter values in — secrets arrive as NoEcho parameters, never stored in the template','CloudFormation builds the dependency graph between resources and creates them in the right order','On any failure the stack rolls back automatically to the last good state; on success, the Outputs are available for other stacks to import'];
+  else flow=['Parameters are validated; logging/transcript starts','The script works through each item, skipping anything already in the desired state','Destructive actions honour -WhatIf, errors are logged, and the transcript closes in a finally block'];
+  var risks=[];
+  var a=analyse(code,lang); a.issues.slice(0,4).forEach(function(i){ risks.push(i.msg); });
+  if(!risks.length) risks.push('No major risks spotted by the built-in checks — still test in a non-production environment first.');
+  return {bullets:bullets.slice(0,10), flow:flow, risks:risks};
+}
+
+/* ---------------- UI WIRING ---------------- */
+var editor=document.getElementById('codeEditor');
+var toastEl=document.getElementById('toast');
+function toast(msg){ toastEl.textContent=msg; toastEl.classList.add('show'); setTimeout(function(){toastEl.classList.remove('show');},2200); }
+function showPanel(id){ document.getElementById('noResults').style.display='none'; document.getElementById(id).style.display='block'; document.getElementById(id).scrollIntoView({behavior:'smooth',block:'nearest'}); }
+
+function setLang(lang){
+  LANG=lang;
+  document.querySelectorAll('.lang').forEach(function(b){ b.classList.toggle('active', b.dataset.lang===lang); });
+  document.getElementById('fileName').textContent=FILENAMES[lang];
+  var chips=document.getElementById('exampleChips'); chips.innerHTML='';
+  EXAMPLES[lang].forEach(function(ex){ var b=document.createElement('button'); b.className='chipbtn'; b.textContent=ex; b.onclick=function(){ document.getElementById('prompt').value=ex; }; chips.appendChild(b); });
+}
+document.querySelectorAll('.lang').forEach(function(b){ b.onclick=function(){ setLang(b.dataset.lang); generate(); }; });
+document.querySelectorAll('.prin').forEach(function(b){ b.onclick=function(){ b.classList.toggle('on'); b.setAttribute('aria-pressed', b.classList.contains('on')); }; });
+
+function generate(){
+  var prompt=document.getElementById('prompt').value.trim()||EXAMPLES[LANG][0];
+  var env=document.getElementById('envSel').value;
+  var code=GEN[LANG](prompt);
+  if(env==='Azure' && LANG==='terraform') code=code.replace(/# Target: AWS/,'# Target: Azure (swap aws_ resources for azurerm_ equivalents)');
+  editor.value=code.trim()+'\n';
+  toast('Code generated for '+LANG.charAt(0).toUpperCase()+LANG.slice(1));
+}
+document.getElementById('generateBtn').onclick=generate;
+document.getElementById('buggyBtn').onclick=function(){ editor.value=BUGGY[LANG]; document.getElementById('errorInput').value=SAMPLE_ERRORS[LANG]||''; toast('Buggy sample + sample error loaded — now hit Debug & Fix'); document.getElementById('studio').scrollIntoView({behavior:'smooth'}); };
+document.getElementById('clearBtn').onclick=function(){ editor.value=''; document.getElementById('prompt').value=''; var ei=document.getElementById('errorInput'); if(ei) ei.value=''; };
+var sampleErrorBtn=document.getElementById('sampleErrorBtn'); if(sampleErrorBtn) sampleErrorBtn.onclick=function(){ document.getElementById('errorInput').value=SAMPLE_ERRORS[LANG]||''; toast('Sample error loaded for '+LANG); };
+var clearErrorBtn=document.getElementById('clearErrorBtn'); if(clearErrorBtn) clearErrorBtn.onclick=function(){ document.getElementById('errorInput').value=''; toast('Error cleared'); };
+document.getElementById('copyBtn').onclick=function(){ if(!editor.value.trim()) return toast('Nothing to copy yet'); navigator.clipboard.writeText(editor.value).then(function(){ toast('Code copied to clipboard'); }); };
+document.getElementById('downloadBtn').onclick=function(){ if(!editor.value.trim()) return toast('Nothing to download yet'); var blob=new Blob([editor.value],{type:'text/plain'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=FILENAMES[LANG]; a.click(); URL.revokeObjectURL(a.href); toast('Downloaded '+FILENAMES[LANG]); };
+
+document.getElementById('debugBtn').onclick=function(){
+  var code=editor.value; if(!code.trim()) return toast('Paste or generate some code first');
+  var errorText=(document.getElementById('errorInput')||{}).value||'';
+  var hasError=!!errorText.trim();
+  var r=analyse(code, LANG);
+  var errAnalysis=analyseError(errorText, code, LANG);
+  var allIssues=errAnalysis.findings.concat(r.issues);
+  showPanel('debugPanel');
+  var body=document.getElementById('debugBody');
+  document.getElementById('debugMeta').textContent=(allIssues.length? allIssues.length+' issue(s) found':'No issues found')+(hasError?' · paired with your error message':'');
+  var errorHtml='';
+  if(hasError){
+    errorHtml='<p style="margin-top:0"><b>Paired with the error you pasted:</b></p><div class="error-snippet">'+escHtml(errorText.trim())+'</div>';
+    if(errAnalysis.matched && errAnalysis.matched.code){
+      errorHtml+='<div class="matched"><b>Matched to line '+errAnalysis.matched.line+' in your code:</b><br><code class="inline">'+escHtml(errAnalysis.matched.code)+'</code><br><span class="muted">That is the line the error points to — start the fix there, then check the findings below.</span></div>';
+    } else if(errAnalysis.matched){
+      errorHtml+='<div class="matched"><b>Matched to line '+errAnalysis.matched.line+' in your error.</b> <span class="muted">Check that line in the editor above first.</span></div>';
+    }
+    if(errAnalysis.findings.length){
+      errorHtml+='<p><b>What this error most likely means</b></p><ul>'+errAnalysis.findings.map(function(i){ return '<li><span class="tag '+(i.sev==='High'?'tag-high':i.sev==='Medium'?'tag-med':'tag-low')+'">'+i.sev+' · '+i.cat+'</span> &nbsp;'+escHtml(i.msg)+'</li>'; }).join('')+'</ul>';
+    }
+  } else {
+    errorHtml='<p class="muted" style="margin-top:0">No error message was pasted — this run used code patterns only. For a more targeted fix, paste the exact error under the editor and run Debug again.</p>';
+  }
+  if(!allIssues.length){ body.innerHTML=errorHtml+'<p>✅ <b>No problems found.</b> This code passes all built-in checks for '+LANG+'. Keep it that way — re-run this after every change.</p>'+(r.positives.length?'<p class="muted"><b>Good patterns spotted:</b> '+r.positives.join(' · ')+'</p>':''); return; }
+  var html=errorHtml;
+  if(r.issues.length){ html+='<p><b>Also found in the code</b></p><ul>'+r.issues.map(function(i){ return '<li><span class="tag '+(i.sev==='High'?'tag-high':i.sev==='Medium'?'tag-med':'tag-low')+'">'+i.sev+' · '+i.cat+'</span> &nbsp;'+i.msg+'</li>'; }).join('')+'</ul>'; }
+  if(r.fixed!==code){ html+='<p><b>Corrected code applied to the editor above ↑</b> — automatic fixes were made for the fixable issues (secrets moved to environment/variables, unsafe calls replaced, HTTPS enforced'+(hasError && /timeout/i.test(errorText)?', timeout added for your timeout error':'')+'). Review the diff, then run Assess to see your new score.</p>'; editor.value=r.fixed; }
+  else if(r.issues.length) html+='<p class="muted">These issues need a human decision (architecture, network ranges, sizing) — the guidance above tells you exactly what to change and why.</p>';
+  body.innerHTML=html; toast('Debug complete — '+allIssues.length+' issue(s)'+(hasError?' (error paired)':''));
+};
+document.getElementById('explainBtn').onclick=function(){
+  var code=editor.value; if(!code.trim()) return toast('Paste or generate some code first');
+  var e=explainCode(code, LANG); showPanel('explainPanel');
+  document.getElementById('explainBody').innerHTML='<p style="margin-top:0"><b>In one line:</b> this '+LANG+' code '+((LANG==='terraform'||LANG==='cloudformation')?'declares infrastructure':LANG==='ansible'?'configures servers':'automates a task')+' with the safeguards described below.</p><b>What each part does</b><ul>'+e.bullets.map(function(b){return '<li>'+b+'</li>';}).join('')+'</ul><b>How it runs, in order</b><ol style="margin:6px 0;padding-left:20px">'+e.flow.map(function(f){return '<li>'+f+'</li>';}).join('')+'</ol><b>Watch out for</b><ul>'+e.risks.map(function(r){return '<li>'+r+'</li>';}).join('')+'</ul>';
+};
+document.getElementById('assessBtn').onclick=function(){
+  var code=editor.value; if(!code.trim()) return toast('Paste or generate some code first');
+  var r=analyse(code, LANG); showPanel('assessPanel');
+  var overall=Math.round((r.scores.Security+r.scores.Reliability+r.scores.Cost)/3);
+  document.getElementById('assessVerdict').innerHTML='<span class="tag '+(overall>=80?'tag-low':overall>=55?'tag-med':'tag-high')+'">Overall '+overall+'/100 — '+(overall>=80?'Ready with minor review':overall>=55?'Fix the findings first':'Not production-ready')+'</span>';
+  var boxes=Object.keys(r.scores).map(function(k){ var v=r.scores[k]; return '<div class="scorebox"><span class="small muted">'+k.toUpperCase()+'</span><br><b>'+v+'</b><span class="muted">/100</span><div class="bar"><i style="width:'+v+'%"></i></div></div>'; }).join('');
+  var findings=r.issues.length? '<b>What is costing you points</b><ul>'+r.issues.map(function(i){return '<li><span class="tag '+(i.sev==='High'?'tag-high':i.sev==='Medium'?'tag-med':'tag-low')+'">'+i.cat+'</span> &nbsp;'+i.msg+'</li>';}).join('')+'</ul>' : '<p>✅ No deductions — this code follows the security, reliability, and cost patterns this tool checks for.</p>';
+  var pos=r.positives.length? '<p class="muted"><b>Strengths:</b> '+r.positives.join(' · ')+'</p>':'';
+  document.getElementById('assessBody').innerHTML='<div class="scoregrid">'+boxes+'</div><div style="margin-top:14px">'+findings+pos+'</div>';
+};
+
+/* Templates */
+var TEMPLATES=[
+ {lang:'python',title:'Secure S3 bucket creator',desc:'Encryption, blocked public access, versioning + lifecycle cost rules.',prompt:'Create a secure S3 bucket with versioning, encryption, blocked public access, and a lifecycle rule that moves old objects to cheaper storage'},
+ {lang:'python',title:'Idle EC2 cost hunter',desc:'Finds running instances under 5% CPU for 7 days and stops them — dry-run by default.',prompt:'List EC2 instances and stop idle ones to save cost'},
+ {lang:'python',title:'Resilient API client',desc:'Timeouts, backoff retries on 429/5xx, token from environment.',prompt:'Call a REST API with retries, timeout and logging'},
+ {lang:'ansible',title:'Server hardening baseline',desc:'Key-only SSH, no root login, firewall + fail2ban, sudo admin user.',prompt:'Harden a Linux server and create a sudo user'},
+ {lang:'ansible',title:'Nginx with HTTPS',desc:'Hardened TLS config, handler-driven reloads, firewall locked to 80/443.',prompt:'Install and configure Nginx with HTTPS'},
+ {lang:'ansible',title:'Safe patching run',desc:'Rolling updates, reboot only when required, post-patch health check.',prompt:'Patch all servers and reboot only if required'},
+ {lang:'terraform',title:'Secure S3 bucket',desc:'Private, encrypted, versioned — with IA/Glacier lifecycle transitions.',prompt:'Secure S3 bucket with versioning and encryption'},
+ {lang:'terraform',title:'Right-sized EC2',desc:'Cost-capped instance types, IMDSv2, encrypted gp3 disk, SSH restricted.',prompt:'Cost-optimised EC2 instance with tags and monitoring'},
+ {lang:'terraform',title:'Private RDS database',desc:'Encrypted, private subnets only, backups on, password as a sensitive variable.',prompt:'RDS database with backups and encryption'},
+ {lang:'powershell',title:'AD users from CSV',desc:'Validated, idempotent, generated temp passwords, full transcript log.',prompt:'Create Active Directory users from a CSV safely'},
+ {lang:'powershell',title:'Disk cleanup with proof',desc:'-WhatIf safe deletion of old files with before/after free-space report.',prompt:'Clean up old files and report disk space saved'},
+ {lang:'powershell',title:'Service watchdog',desc:'Checks a service, restarts only if stopped, and verifies it recovered.',prompt:'Check and restart a Windows service with logging'},
+ {lang:'cloudformation',title:'Secure S3 bucket stack',desc:'Private, encrypted, versioned bucket — with IA/Glacier lifecycle transitions.',prompt:'Secure S3 bucket with versioning and encryption'},
+ {lang:'cloudformation',title:'Right-sized EC2 stack',desc:'Cost-capped instance types, IMDSv2, encrypted gp3 disk, SSH from your range only.',prompt:'Cost-optimised EC2 instance with tags and monitoring'},
+ {lang:'cloudformation',title:'Private RDS stack',desc:'Encrypted, private subnets only, backups on, password as a NoEcho parameter.',prompt:'RDS database with backups and encryption'}
+];
+var tg=document.getElementById('templateGrid');
+TEMPLATES.forEach(function(t){ var b=document.createElement('button'); b.className='tcard'; b.innerHTML='<span class="langtag">'+t.lang+'</span><b>'+t.title+'</b><span>'+t.desc+'</span>'; b.onclick=function(){ setLang(t.lang); document.getElementById('prompt').value=t.prompt; generate(); document.getElementById('studio').scrollIntoView({behavior:'smooth'}); }; tg.appendChild(b); });
+
+setLang('python'); generate();
+</script>
+
+<script>
+// Arowotech — interactive enhancements (progressive, does not replace core logic)
+(function(){
+  var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Sticky header shadow + back to top
+  var topbar=document.querySelector('.topbar'); var backTop=document.getElementById('backTop');
+  function onScroll(){ var y=window.scrollY||0; if(topbar) topbar.classList.toggle('scrolled', y>8); if(backTop) backTop.classList.toggle('show', y>520); }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  if(backTop) backTop.addEventListener('click', function(){ window.scrollTo({top:0, behavior: prefersReduced?'auto':'smooth'}); });
+  // Theme toggle (in-memory for this session)
+  var themeBtn=document.getElementById('themeToggle');
+  if(themeBtn) themeBtn.addEventListener('click', function(){
+    var cur=document.documentElement.getAttribute('data-theme');
+    var isDark = cur==='dark' || (!cur && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.setAttribute('data-theme', isDark?'light':'dark');
+    themeBtn.textContent = isDark ? '◐ Dark' : '◐ Light';
+  });
+  // Reveal on scroll
+  var revealEls=document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window && !prefersReduced){
+    var io=new IntersectionObserver(function(entries){ entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); }, {threshold:.08});
+    revealEls.forEach(function(el){ io.observe(el); });
+  } else { revealEls.forEach(function(el){ el.classList.add('in'); }); }
+  // Animated counters
+  var counters=document.querySelectorAll('[data-count]');
+  function animateCount(el){
+    var target=parseInt(el.getAttribute('data-count'),10); var suffix=el.getAttribute('data-suffix')||'';
+    if(prefersReduced || isNaN(target)){ return; }
+    var start=null, dur=700;
+    function tick(ts){ if(!start) start=ts; var p=Math.min(1,(ts-start)/dur); var v=Math.round(target * (1-Math.pow(1-p,3))); el.textContent=v+suffix; if(p<1) requestAnimationFrame(tick); }
+    requestAnimationFrame(tick);
+  }
+  if('IntersectionObserver' in window){
+    var cio=new IntersectionObserver(function(entries){ entries.forEach(function(e){ if(e.isIntersecting){ animateCount(e.target); cio.unobserve(e.target); } }); }, {threshold:.4});
+    counters.forEach(function(el){ cio.observe(el); });
+  }
+  // Editor stats + lang badge sync
+  var editor=document.getElementById('codeEditor'); var statsEl=document.getElementById('editorStats'); var badge=document.getElementById('langBadge');
+  var langNames={python:'Python',ansible:'Ansible',terraform:'Terraform',powershell:'PowerShell',cloudformation:'CloudFormation'};
+  function syncEditor(){
+    if(editor && statsEl){ var v=editor.value||''; var lines=v? v.split('\n').length:0; statsEl.textContent=lines+' lines · '+v.length+' chars'; }
+    // badge follows active lang button
+    var active=document.querySelector('.lang.active'); if(active && badge){ badge.textContent=langNames[active.getAttribute('data-lang')]||active.textContent.trim(); }
+  }
+  if(editor){ editor.addEventListener('input', syncEditor); editor.addEventListener('keyup', syncEditor);
+    // Tab inserts two spaces instead of leaving the editor
+    editor.addEventListener('keydown', function(e){ if(e.key==='Tab'){ e.preventDefault(); var s=editor.selectionStart, en=editor.selectionEnd; editor.setRangeText('  ', s, en, 'end'); syncEditor(); } });
+  }
+  document.querySelectorAll('.lang').forEach(function(b){ b.addEventListener('click', function(){ setTimeout(syncEditor, 30); }); });
+  setTimeout(syncEditor, 80); setInterval(syncEditor, 1200);
+  // Ctrl/Cmd+Enter to generate from anywhere in the studio
+  document.addEventListener('keydown', function(e){ if((e.ctrlKey||e.metaKey) && e.key==='Enter'){ var g=document.getElementById('generateBtn'); if(g){ e.preventDefault(); g.click(); } } });
+  // Generate button brief loading state (visual only, core generate is instant)
+  var genBtn=document.getElementById('generateBtn');
+  if(genBtn){ var orig=genBtn.innerHTML; genBtn.addEventListener('click', function(){ genBtn.classList.add('loading'); genBtn.innerHTML='Generating…'; setTimeout(function(){ genBtn.classList.remove('loading'); genBtn.innerHTML=orig; syncEditor(); }, 320); }); }
+  // Copy button label feedback is handled by toast in core; also flash text
+  var copyBtn=document.getElementById('copyBtn'); if(copyBtn){ copyBtn.addEventListener('click', function(){ var o=copyBtn.textContent; copyBtn.textContent='Copied ✓'; setTimeout(function(){ copyBtn.textContent=o; }, 1400); }); }
+  // Template filtering (cards are rendered by core script above)
+  function tagCards(){ document.querySelectorAll('#templateGrid .tcard').forEach(function(card){ var tag=card.querySelector('.langtag'); if(tag && !card.getAttribute('data-lang')) card.setAttribute('data-lang', tag.textContent.trim().toLowerCase()); }); }
+  tagCards(); setTimeout(tagCards, 100);
+  var filterBar=document.getElementById('templateFilters'); var filterEmpty=document.getElementById('filterEmpty');
+  if(filterBar){ filterBar.addEventListener('click', function(e){ var btn=e.target.closest('.filterbtn'); if(!btn) return; filterBar.querySelectorAll('.filterbtn').forEach(function(b){ b.classList.toggle('active', b===btn); }); tagCards(); var f=btn.getAttribute('data-filter'); var visible=0; document.querySelectorAll('#templateGrid .tcard').forEach(function(card){ var show=(f==='all' || card.getAttribute('data-lang')===f); card.classList.toggle('hidden-card', !show); if(show) visible++; }); if(filterEmpty) filterEmpty.style.display=visible?'none':'block'; }); }
+})();
+</script>
+</body>
+</html>
